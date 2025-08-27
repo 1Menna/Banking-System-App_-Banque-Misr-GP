@@ -1,1 +1,68 @@
-<p>user-home works!</p>
+<div class="fluid-container">
+  <!-- First Row -->
+   <!-- =========================================== -->
+  <div class="row" style="height: 50vh;">
+    <div class="col text-white p-3 d-flex flex-column justify-content-center align-items-center">
+      <a class="navbar-brand text-primary me-2 brand-icon">
+        <i class="fa-regular fa-credit-card"></i>
+      </a>
+      <p class="text-dark" style="font-weight: bold; font-size: 25px;">Welcome back, user1!</p>
+      <p class="text-secondary">Access your account and mangae your finances securely</p>
+    </div>
+  </div>
+
+  <!-- Second Row -->
+   <!-- =========================================== -->
+  <div class="row mt-3 mx-2" style="height: 50vh">
+    <div class="col-lg-4 col-md-6 col-12 text-dark p-3">
+        <mat-card class="example-card" appearance="outlined">
+            <mat-card-header>
+                <mat-card-title>My Account</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <p>View your account balance and your transactions</p>
+            </mat-card-content>
+            <mat-card-footer class="m-3">
+                <mat-chip-set aria-label="Chihuahua traits">
+                   <mat-chip routerLink="/user/my-account">Get Started</mat-chip>
+                </mat-chip-set>
+            </mat-card-footer>
+        </mat-card>
+    </div>
+    <!-- =========================================== -->
+    <div class="col-lg-4 col-md-6 col-12 text-dark p-3">
+        <mat-card class="example-card" appearance="outlined">
+            <mat-card-header>
+                <mat-card-title>Transaction History</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <p>Browse and filter all your transactions</p>
+            </mat-card-content>
+            <mat-card-footer class="m-3">
+                <mat-chip-set aria-label="Chihuahua traits">
+                   <mat-chip routerLink="/user/transactions">Get Started</mat-chip>
+                </mat-chip-set>
+            </mat-card-footer>
+        </mat-card>
+    </div>
+    <!-- =========================================== -->
+    <div class="col-lg-4 col-md-6 col-12 text-dark p-3">
+        <mat-card class="example-card" appearance="outlined">
+            <mat-card-header>
+                <mat-card-title>Fund Transfer</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <p>Transfer money to other accounts securely</p>
+            </mat-card-content>
+            <mat-card-footer class="m-3">
+                <mat-chip-set aria-label="Chihuahua traits">
+                   <mat-chip routerLink="/user/transfer">Get Started</mat-chip>
+                </mat-chip-set>
+            </mat-card-footer>
+        </mat-card>
+    </div>
+    <!-- =========================================== -->
+  </div>
+  <!--------------->
+
+</div>
