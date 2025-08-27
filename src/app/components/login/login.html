@@ -1,1 +1,68 @@
-<p>login works!</p>
+<div class="container-fluid">
+    <!-- First Row -->
+    <div class="row" style="height: 50vh;">
+        <div class="col text-white p-3 d-flex flex-column justify-content-center align-items-center">
+            <a class="navbar-brand text-primary me-2 brand-icon">
+                <i class="fa-regular fa-credit-card"></i>
+            </a>
+            <p class="text-dark fw-bold fs-3">Welcome Back!</p>
+            <p class="text-secondary">Sign in to access your account securely</p>
+        </div>
+    </div>
+
+    <!-- Second Row -->
+    <div class="row mt-3 mx-2 justify-content-center">
+        <div class="col-lg-4 col-md-6 col-12 text-dark p-3">
+            <div class="card shadow rounded-4 p-4">
+                <h4 class="mb-4 text-center text-primary">
+                    <i class="fa-solid fa-right-to-bracket me-2"></i> Login
+                </h4>
+
+                <!-- Reactive Form -->
+                <form [formGroup]="loginForm" (ngSubmit)="submit()">
+                    <!-- Username -->
+                    <div class="mb-3">
+                        <label for="userName" class="form-label">Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-regular fa-user"></i>
+                            </span>
+                            <input type="text" id="userName" class="form-control" placeholder="Enter username"
+                                formControlName="userName" />
+                        </div>
+                        <small *ngIf="loginForm.get('userName')?.invalid && loginForm.get('userName')?.touched"
+                            class="text-danger">
+                            Username is required
+                        </small>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-lock"></i>
+                            </span>
+                            <input type="password" id="password" class="form-control" placeholder="Enter password"
+                                formControlName="password" />
+                        </div>
+                        <small *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+                            class="text-danger">
+                            Password is required
+                        </small>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div *ngIf="errorMessage" class="text-danger mb-2">
+                        {{ errorMessage }}
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary w-100 mt-3" [disabled]="loginForm.invalid">
+                        <i class="fa-solid fa-right-to-bracket me-2"></i> Sign In
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -11,16 +11,18 @@ import { MyAccount } from './components/my-account/my-account';
 import { Transactions } from './components/transactions/transactions';
 import { Transfer } from './components/transfer/transfer';
 import { Login } from './components/login/login';
+import { authGuard } from './core/guards/auth-guard';
 
 export const routes: Routes = [
     {path:'',redirectTo:'login',pathMatch:'full'},
     {path:'login',component:Login,title:"Login"},
-    { path: 'admin', component: AdminLayout,children:[
+    {path: 'admin', component: AdminLayout, canActivate: [authGuard],children:[
         {path:'',redirectTo:'admin-home',pathMatch:'full'},
         {path:'admin-home',component:AdminHome,title:"Admin Home"},
         {path:'admin-panel',component:AdminPanel,title:"Admin Panel"}
     ] },
-    { path: 'user', component:UserLayout, children: [
+    {
+        path: 'user', component: UserLayout, canActivate: [authGuard] ,children: [
         {path:'',redirectTo:'user-home',pathMatch:'full'},
         {path:'user-home',component:UserHome,title:"User Home"},
         {path:'my-account',component:MyAccount,title:"My Account"},
