@@ -1,0 +1,24 @@
+.nav-link {
+  display: flex;               
+  align-items: center; 
+  justify-content: center;        
+  padding: 0.14rem 0.5rem;
+  border-radius: 8px;
+  gap: 8px;
+  margin: 0 2px;
+  
+}
+ .brand-icon {
+  padding: 0.17rem 0.5rem;
+  border-radius: 11px;
+}
+
+.active,.activated-link { 
+  background-color: #91b8f5 !important; 
+}
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  
+}
