@@ -16,18 +16,20 @@ import { authGuard } from './core/guards/auth-guard';
 export const routes: Routes = [
     {path:'',redirectTo:'login',pathMatch:'full'},
     {path:'login',component:Login,title:"Login"},
-    {path: 'admin', component: AdminLayout, canActivate: [authGuard],children:[
+    {path: 'admin', component: AdminLayout, canActivate: [authGuard], data: { role: 'Admin' },children:[
         {path:'',redirectTo:'admin-home',pathMatch:'full'},
         {path:'admin-home',component:AdminHome,title:"Admin Home"},
         {path:'admin-panel',component:AdminPanel,title:"Admin Panel"}
     ] },
     {
-        path: 'user', component: UserLayout, canActivate: [authGuard] ,children: [
+        path: 'user', component: UserLayout, canActivate: [authGuard], data: { role: 'User' } ,children: [
         {path:'',redirectTo:'user-home',pathMatch:'full'},
         {path:'user-home',component:UserHome,title:"User Home"},
         {path:'my-account',component:MyAccount,title:"My Account"},
         {path:'transactions',component:Transactions,title:"Transactions"},
         {path:'transfer',component:Transfer,title:"Transfer"}
-    ]},
+    ]
+},
     {path:"**", component:NotFound,title:"Not Found"}
 ];
+

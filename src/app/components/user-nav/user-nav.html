@@ -29,9 +29,9 @@
       </ul>
     </div>
     <div class="d-flex align-items-center ms-3">
-      <span class="text-white me-3">Welcome, user1</span>
+      <span class="text-white me-3">Welcome, {{currentUser?.userName}}</span>
       <a class="btn bg-white nav-link " 
-         routerLink="/user/logout">
+         (click)="logout()">
         <i class="fa-solid fa-right-from-bracket"></i>
         Logout
       </a>
