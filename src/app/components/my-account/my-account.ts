@@ -17,7 +17,7 @@ export class MyAccount {
 
   transactions = [
     { description: "Salary deposit", date: "Jan 15, 2024", amount: 1000, type: "credit" },
-    { description: "Grocery shopping", date: "Jan 14, 2024", amount: -250, type: "debit" },
+    { description: "Grocery shopping", date: "Jan 14, 2024", amount: 250, type: "debit" },
     { description: "Freelance payment", date: "Jan 13, 2024", amount: 500, type: "credit" }
   ];
 }
