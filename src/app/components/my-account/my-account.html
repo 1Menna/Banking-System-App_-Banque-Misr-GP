@@ -1,1 +1,11 @@
-<p>my-account works!</p>
+<div class="account-container">
+  <h2>My Account</h2>
+
+  <div class="account-card">
+    <p><strong>Name:</strong> {{ account.name }}</p>
+    <p><strong>Account Number:</strong> {{ account.accountNumber }}</p>
+    <p><strong>Balance:</strong> {{ account.balance | currency:'USD' }}</p>
+    <p><strong>Email:</strong> {{ account.email }}</p>
+    <p><strong>Phone:</strong> {{ account.phone }}</p>
+  </div>
+</div>
