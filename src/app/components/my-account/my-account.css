@@ -1,19 +1,96 @@
 .account-container {
-  max-width: 500px;
+  max-width: 900px;
   margin: 30px auto;
   padding: 20px;
-  background: #f9f9f9;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #2c3e50;
+  font-family: Arial, sans-serif;
 }
 
 .account-card {
-  font-size: 16px;
-  line-height: 1.8;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+h2 {
+  font-size: 18px;
+  margin-bottom: 6px;
+  color: #2c3e50;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.account-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.account-item {
+  font-size: 15px;
+  color: #333;
+}
+
+.balance {
+  font-size: 20px;
+  color: green;
+  font-weight: bold;
+}
+
+/* Transactions */
+.transactions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.transaction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.tx-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.tx-title {
+  font-weight: bold;
+  margin: 0;
+  font-size: 15px;
+}
+
+.tx-date {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+}
+
+.tx-amount {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.transaction.credit .tx-amount {
+  color: green;
+}
+
+.transaction.debit .tx-amount {
+  color: red;
+}
+
+.type {
+  font-size: 12px;
+  margin-left: 6px;
+  color: #666;
 }

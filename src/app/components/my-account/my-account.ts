@@ -1,21 +1,23 @@
 import { Component } from '@angular/core';
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, NgFor, NgClass } from '@angular/common';
+
 @Component({
   selector: 'app-my-account',
-   imports: [CurrencyPipe],
+  standalone: true,
+  imports: [CurrencyPipe, NgFor, NgClass],
   templateUrl: './my-account.html',
   styleUrls: ['./my-account.css']
 })
 export class MyAccount {
   account = {
-    name: "John Doe",
-    accountNumber: "1234 5678 9101",
-    balance: 2500.75,
-    email: "john.doe@email.com",
-    phone: "+20123456789"
+    accountNumber: "ACC001",
+    accountType: "Savings",
+    balance: 5000.00,
   };
 
-  constructor() {}
-
-  ngOnInit(): void {}
+  transactions = [
+    { description: "Salary deposit", date: "Jan 15, 2024", amount: 1000, type: "credit" },
+    { description: "Grocery shopping", date: "Jan 14, 2024", amount: -250, type: "debit" },
+    { description: "Freelance payment", date: "Jan 13, 2024", amount: 500, type: "credit" }
+  ];
 }

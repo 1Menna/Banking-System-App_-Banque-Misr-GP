@@ -1,11 +1,43 @@
 <div class="account-container">
-  <h2>My Account</h2>
 
+  <!-- Account Overview -->
   <div class="account-card">
-    <p><strong>Name:</strong> {{ account.name }}</p>
-    <p><strong>Account Number:</strong> {{ account.accountNumber }}</p>
-    <p><strong>Balance:</strong> {{ account.balance | currency:'USD' }}</p>
-    <p><strong>Email:</strong> {{ account.email }}</p>
-    <p><strong>Phone:</strong> {{ account.phone }}</p>
+    <h2>Account Overview</h2>
+    <p class="subtitle">Your account details and current balance</p>
+
+    <div class="account-info">
+      <div class="account-item">
+        <p><strong>Account Number</strong></p>
+        <p>{{ account.accountNumber }}</p>
+      </div>
+      <div class="account-item">
+        <p><strong>Account Type</strong></p>
+        <p>{{ account.accountType }}</p>
+      </div>
+      <div class="account-item">
+        <p><strong>Current Balance</strong></p>
+        <p class="balance">{{ account.balance | currency:'USD' }}</p>
+      </div>
+    </div>
   </div>
+
+  <!-- Recent Transactions -->
+  <div class="account-card">
+    <h2>Recent Transactions</h2>
+    <p class="subtitle">Your latest account activity</p>
+
+    <div class="transactions">
+      <div class="transaction" *ngFor="let t of transactions" [ngClass]="t.type">
+        <div class="tx-left">
+          <p class="tx-title">{{ t.description }}</p>
+          <p class="tx-date">{{ t.date }}</p>
+        </div>
+        <div class="tx-amount">
+          {{ t.amount | currency:'USD' }}
+          <span class="type">{{ t.type === 'credit' ? 'Credit' : 'Debit' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
