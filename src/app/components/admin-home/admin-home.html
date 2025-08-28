@@ -13,23 +13,25 @@
 
   <!-- Second Row -->
    <!-- =========================================== -->
-  <div class="row mt-3 mx-2" style="height: 50vh">
+ <div class="row mt-3 mx-2" style="height: 50vh">
     <div class="col-lg-4 col-md-6 col-12 text-dark p-3">
         <mat-card class="example-card" appearance="outlined">
-            <mat-card-header>
+            <div class="header m-2">
+                <a class="navbar-brand text-primary me-2 card_icon card_Back_icon">
+                    <i class="fa-solid fa-users"></i>
+                </a>
                 <mat-card-title>User Management</mat-card-title>
-            </mat-card-header>
+            </div>
             <mat-card-content>
                 <p>Manage all users and their permissions</p>
             </mat-card-content>
             <mat-card-footer class="m-3">
                 <mat-chip-set aria-label="Chihuahua traits">
-                   <mat-chip routerLink="/admin/admin-panel">Get Started</mat-chip>
+                   <mat-chip routerLink="/admin/admin-panel"><span class="me-2">Get Started</span> <i class="fa-solid fa-arrow-right"></i></mat-chip>     
                 </mat-chip-set>
             </mat-card-footer>
         </mat-card>
     </div>
-  </div>
   <!--------------->
 
 </div>

@@ -1,11 +1,41 @@
-.brand-icon{
-    font-size: 40px;
+.brand-icon {
+  font-size: 40px;
 }
+
+.Back_icon {
+  background-color: #d9e8fe;
+  border-radius: 50%;
+  width: 70px;   /* make sure width = height */
+  height: 70px;
+  display: flex;
+  align-items: center;  /* vertical center */
+  justify-content: center; /* horizontal center */
+}
+/* ___________________________________________________ */
 .wlcome{
     font-weight: bold;
     
 }
-
+/* ___________________________________________________ */
 mat-chip{
     width: 100%;
+}
+
+.card_icon {
+  font-size: 20px;
+}
+
+.card_Back_icon {
+  background-color: #d9e8fe;
+  border-radius: 50%;
+  width: 40px;   /* make sure width = height */
+  height: 40px;
+  display: flex;
+  align-items: center;  /* vertical center */
+  justify-content: center; /* horizontal center */
+}
+.header {
+  display: flex;
+  flex-direction: row; /* force normal order */
+  align-items: center;
 }
