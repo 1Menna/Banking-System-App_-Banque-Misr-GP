@@ -12,13 +12,13 @@
   font-size: 12px;
   color: #928f8f;
 }
-.transaction-con{
+.container{
  max-width: 95%;
  margin-left:15px;
  font-family: Arial, sans-serif;
 }
 
-.transaction-card{
+.card-design{
   background: #fff;
   border-radius: 12px;
   padding: 15px;
@@ -60,12 +60,29 @@
   border-style: none;
 }
 .text-muted{
- color: rgb(201, 203, 203);}
+ color: rgb(201, 203, 203);
+}
 
-/* option{
-  border-style: none;
+.fa-arrow-trend-up{
+  color: green;
+  background-color: #DCFDEE;
+  padding: 10px;
+  border-radius: 50%;
+}
+.fa-arrow-trend-down{
+  color: red;
+  background-color: #FFDFE9;
+  padding: 10px;
+  border-radius: 50%;
+}
+h6{
+  font-weight: 600;
+  font-size: 16px;
+}
+.transactions-no{
   font-size: 14px;
-  border: 1 solid #e0e0e0;
-  border-radius: 2px;
-} */
-  
+  color: #928f8f;
+}
+.description{
+  font-size: 14px;
+} 

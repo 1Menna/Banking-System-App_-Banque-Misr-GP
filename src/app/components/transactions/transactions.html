@@ -2,8 +2,8 @@
   <h5>Transaction History</h5>
   <p>View and filter your account transactions</p>
 </div>
-<div class="transaction-con">
-  <div class="transaction-card">
+<div class="container">
+  <div class="card-design">
     <div class="d-flex">
     <a class="navbar-brand text-dark">
       <i class=" filter-icon fa-solid fa-filter"></i>
@@ -44,9 +44,11 @@
   </div>
 }
 
-<!-- <div class="transactions mt-4">
+<div class="container">
+  <div class="card-design">
+     <div class="transactions mt-4">
   <h6>Transactions</h6>
-  <p>{{ filtered().length }} transactions found</p>
+  <p class="transactions-no">{{ filtered().length }} transactions found</p>
 
   @if (filtered().length === 0) {
     <p class="text-muted">No transactions found</p>
@@ -55,14 +57,28 @@
       @for (t of filtered(); track t.id) {
         <div class="transaction-item card p-3 mb-2" (click)="showDetails(t)">
           <div class="d-flex justify-content-between align-items-center">
-            <div>
-              <p class="fw-bold mb-1">{{ t.description }}</p>
-              <p class="text-muted mb-0">{{ t.date }}</p>
-              <span class="badge bg-primary">{{ t.type }}</span>
+            <div class="d-flex align-items-center gap-3">
+              <div class="icon">
+  <i class="fa-solid" 
+     [ngClass]="{
+       'fa-arrow-trend-up': t.type === 'Credit', 
+       'fa-arrow-trend-down': t.type !== 'Credit',
+     }">
+  </i>
+</div>
+              <div class="icon-info">
+                <p class="description fw-bold mb-1">{{ t.description }}</p>
+                <div class="date-type d-flex align-items-center gap-2">
+                <p class="text-muted mb-0">{{ t.date | date:'MMM d,y'}}</p>
+                <span [ngClass]="t.type ==='Credit' ? 'badge bg-primary': 'badge bg-success' ">{{ t.type }}</span>
+              </div>
+              </div>
+              
             </div>
             <div class="text-end">
               <p [ngClass]="t.type === 'Credit' ? 'text-success' : 'text-danger'" class="fw-bold mb-1">
-                {{ t.amount | currency:'USD':'symbol' }}
+                {{t.type === 'Credit' ? '+' : '--'}}
+                {{ t.amount| currency:'USD':'symbol' }}
               </p>
               <p class="text-muted mb-0">Transaction ID: {{ t.id }}</p>
             </div>
@@ -73,7 +89,6 @@
   }
 </div>
 
-<!-- Details panel -->
 @if (selectedTransaction) {
   <div class="transaction-details card mt-4 p-3">
     <h6>Transaction Details</h6>
@@ -89,4 +104,6 @@
 
     <button class="btn btn-sm btn-secondary mt-2" (click)="closeDetails()">Close</button>
   </div>
-} -->
+}
+  </div>
+</div> 
