@@ -1,1 +1,45 @@
-<p>transactions works!</p>
+<div class="title">
+  <h5>Transaction History</h5>
+  <p>View and filter your account transactions</p>
+</div>
+<div class="transaction-con">
+  <div class="transaction-card">
+    <div class="d-flex">
+    <a class="navbar-brand text-dark">
+      <i class=" filter-icon fa-solid fa-filter"></i>
+    </a>
+    <p class="icon-desc">Filters<p>
+    </div>
+    <div class="transaction-info d-flex ">
+   <div class="search">
+    <p class="info-p">Search Description</p>
+     <i class=" search-icon fa-solid fa-sm fa-magnifying-glass"></i>
+    <input type="text" [(ngModel)]="query" class="search-field" 
+    placeholder=" Search by description..."/> 
+    <small class="text-muted">
+      Showing {{filtered().length}} of {{transactions.length}} transactions
+    </small>
+   </div>
+   <div class="transaction-type">
+    <p class="info-p">Transaction Type</p>
+     <select class="form-select w-auto" id="transactionTypes" [(ngModel)]="typeFilter">
+      <option value="">All Types</option>
+      <option value="Credit">Credit</option>
+      <option value="Debit">Debit</option>
+    </select>
+   </div>
+  </div>
+  </div>
+</div>
+
+@if (filtered().length === 0) {
+  <div class="text-muted">
+    No transactions found.
+  </div>
+} @else {
+  <div class="stack">
+    @for (t of filtered(); track t.id ) {
+     <!-- <app-transactions [transactions]="t"></app-transactions> -->
+    }
+  </div>
+}

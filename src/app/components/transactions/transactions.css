@@ -1,0 +1,72 @@
+.title{
+  margin: 30px 0px 0px 15px;
+  padding: auto;
+}
+.title h5{
+  font-weight: 600;
+  font-size: 18px;
+  line-height:4px;
+}
+.title p{
+  font-weight: 400;
+  font-size: 12px;
+  color: #928f8f;
+}
+.transaction-con{
+ max-width: 95%;
+ margin-left:15px;
+ font-family: Arial, sans-serif;
+}
+
+.transaction-card{
+  background: #fff;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 20px;
+  margin-top:0px ;
+  border: 1px solid #e0e0e0;
+}
+.filter-icon{
+  margin-bottom: 4px;
+}
+.icon-desc{
+  font-size: 14px;
+  padding-right: 3px;
+  margin-left: 5px;
+}
+.info-p{
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.search-field{
+  font-size: 14px;
+  border-style: none;
+  color: rgb(201, 203, 203);
+  margin-bottom: 20px;
+}
+
+.search{
+  margin-right: 400px;
+  max-width: 250px;
+}
+.search-icon{
+  color: rgb(201, 203, 203);  
+  margin-left: 16px;
+  
+}
+.form-select{
+  font-size: 14px;
+  border-style: none;
+}
+.text-muted{
+ color: rgb(201, 203, 203);
+}
+
+/* option{
+  border-style: none;
+  font-size: 14px;
+  border: 1 solid #e0e0e0;
+  border-radius: 2px;
+} */
+  
