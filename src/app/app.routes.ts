@@ -8,7 +8,6 @@ import { AdminPanel } from './components/admin-panel/admin-panel';
 import path from 'path';
 import { UserHome } from "./components/user-home/user-home";
 import { MyAccount } from './components/my-account/my-account';
-import { Transactions } from './components/transactions/transactions';
 import { Transfer } from './components/transfer/transfer';
 import { Login } from './components/login/login';
 import { authGuard } from './core/guards/auth-guard';
@@ -26,7 +25,9 @@ export const routes: Routes = [
         {path:'',redirectTo:'user-home',pathMatch:'full'},
         {path:'user-home',component:UserHome,title:"User Home"},
         {path:'my-account',component:MyAccount,title:"My Account"},
-        {path:'transactions',component:Transactions,title:"Transactions"},
+        {path:'transactions', loadComponent: ()=> 
+        import('./components/transactions/transactions').then(m=>m.Transactions),
+        title:"Transactions"},
         {path:'transfer',component:Transfer,title:"Transfer"}
     ]
 },

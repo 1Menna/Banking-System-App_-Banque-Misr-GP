@@ -36,10 +36,13 @@ export class Auth {
     return !!localStorage.getItem(this.storageKey); 
   }
 
-  getCurrentUser(): UserInterface | null {
-    const userData = localStorage.getItem(this.storageKey);
-    return userData ? JSON.parse(userData) : null;
+ getCurrentUser() {
+  if (typeof window !== 'undefined' && localStorage) {
+    const user = localStorage.getItem(this.storageKey); 
+    return user ? JSON.parse(user) : null;
   }
+  return null;
+}
 
   logout(): void {
     localStorage.removeItem(this.storageKey);

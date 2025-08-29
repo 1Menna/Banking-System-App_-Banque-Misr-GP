@@ -43,3 +43,50 @@
     }
   </div>
 }
+
+<!-- <div class="transactions mt-4">
+  <h6>Transactions</h6>
+  <p>{{ filtered().length }} transactions found</p>
+
+  @if (filtered().length === 0) {
+    <p class="text-muted">No transactions found</p>
+  } @else {
+    <div class="stack">
+      @for (t of filtered(); track t.id) {
+        <div class="transaction-item card p-3 mb-2" (click)="showDetails(t)">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="fw-bold mb-1">{{ t.description }}</p>
+              <p class="text-muted mb-0">{{ t.date }}</p>
+              <span class="badge bg-primary">{{ t.type }}</span>
+            </div>
+            <div class="text-end">
+              <p [ngClass]="t.type === 'Credit' ? 'text-success' : 'text-danger'" class="fw-bold mb-1">
+                {{ t.amount | currency:'USD':'symbol' }}
+              </p>
+              <p class="text-muted mb-0">Transaction ID: {{ t.id }}</p>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<!-- Details panel -->
+@if (selectedTransaction) {
+  <div class="transaction-details card mt-4 p-3">
+    <h6>Transaction Details</h6>
+    <p><strong>ID:</strong> {{ selectedTransaction.id }}</p>
+    <p><strong>Description:</strong> {{ selectedTransaction.description }}</p>
+    <p><strong>Type:</strong> {{ selectedTransaction.type }}</p>
+    <p><strong>Amount:</strong>
+      <span [ngClass]="selectedTransaction.type === 'Credit' ? 'text-success' : 'text-danger'">
+        {{ selectedTransaction.amount | currency:'USD':'symbol' }}
+      </span>
+    </p>
+    <p><strong>Date:</strong> {{ selectedTransaction.date }}</p>
+
+    <button class="btn btn-sm btn-secondary mt-2" (click)="closeDetails()">Close</button>
+  </div>
+} -->
