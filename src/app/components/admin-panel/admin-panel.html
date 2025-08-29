@@ -1,1 +1,321 @@
-<p>admin-panel works!</p>
+<div class="fluid-container">
+  <!-- Header Section -->
+  <div class="row" style="min-height: 20vh;">
+    <div class="col text-white p-3 d-flex flex-column justify-content-center align-items-center">
+      <a class="navbar-brand text-primary me-2 brand-icon">
+        <i class="fa-solid fa-users-gear"></i>
+      </a>
+      <p class="text-dark" style="font-weight: bold; font-size: 25px;">User Management</p>
+      <p class="text-secondary">Manage all users and their permissions</p>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container">
+    <div *ngIf="successMessage" class="toast toast-success show">
+      <div class="toast-header">
+        <i class="fa-solid fa-check-circle text-success me-2"></i>
+        <strong class="me-auto">Success</strong>
+        <button type="button" class="btn-close" (click)="clearMessages()" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        {{ successMessage }}
+      </div>
+    </div>
+    
+    <div *ngIf="errorMessage" class="toast toast-error show">
+      <div class="toast-header">
+        <i class="fa-solid fa-exclamation-circle text-danger me-2"></i>
+        <strong class="me-auto">Error</strong>
+        <button type="button" class="btn-close" (click)="clearMessages()" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        {{ errorMessage }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="row mt-3 mx-2">
+    <div class="col-12">
+      <!-- Add User Button -->
+      <div class="mb-3 d-flex justify-content-between align-items-center">
+        <h4 class="text-primary">
+          <i class="fa-solid fa-users me-2"></i>Users List
+        </h4>
+        <button 
+          *ngIf="!showAddForm" 
+          class="btn btn-primary" 
+          (click)="showAddUserForm()">
+          <i class="fa-solid fa-plus me-2"></i>Add New User
+        </button>
+      </div>
+
+      <!-- Add/Edit User Modal Overlay -->
+      <div *ngIf="showAddForm" class="modal-overlay" (click)="onOverlayClick($event)">
+        <div class="modal-content card shadow rounded-4 p-4" (click)="$event.stopPropagation()">
+          <div class="modal-header mb-4">
+            <h5 class="text-center text-primary mb-0">
+              <i class="fa-solid fa-user-plus me-2" *ngIf="!isEditing"></i>
+              <i class="fa-solid fa-user-edit me-2" *ngIf="isEditing"></i>
+              {{ isEditing ? 'Edit User' : 'Add New User' }}
+            </h5>
+            <button type="button" class="btn-close" (click)="hideForm()" aria-label="Close"></button>
+          </div>
+
+          <form [formGroup]="userForm" (ngSubmit)="submitForm()">
+            <div class="row">
+              <!-- Username -->
+              <div class="col-md-6 mb-3">
+                <label for="userName" class="form-label">Username *</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="fa-regular fa-user"></i>
+                  </span>
+                  <input 
+                    type="text" 
+                    id="userName" 
+                    class="form-control" 
+                    placeholder="Enter username"
+                    formControlName="userName" />
+                </div>
+                <small *ngIf="userForm.get('userName')?.invalid && userForm.get('userName')?.touched" 
+                       class="text-danger">
+                  {{ getFieldError('userName') }}
+                </small>
+              </div>
+
+              <!-- Email -->
+              <div class="col-md-6 mb-3">
+                <label for="email" class="form-label">Email *</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="fa-regular fa-envelope"></i>
+                  </span>
+                  <input 
+                    type="email" 
+                    id="email" 
+                    class="form-control" 
+                    placeholder="Enter email"
+                    formControlName="email" />
+                </div>
+                <small *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" 
+                       class="text-danger">
+                  {{ getFieldError('email') }}
+                </small>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Password -->
+              <div class="col-md-6 mb-3">
+                <label for="password" class="form-label">Password *</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="fa-solid fa-lock"></i>
+                  </span>
+                  <input 
+                    type="password" 
+                    id="password" 
+                    class="form-control" 
+                    placeholder="Enter password"
+                    formControlName="password" />
+                </div>
+                <small *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched" 
+                       class="text-danger">
+                  {{ getFieldError('password') }}
+                </small>
+              </div>
+
+              <!-- Phone -->
+              <div class="col-md-6 mb-3">
+                <label for="phone" class="form-label">Phone *</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="fa-solid fa-phone"></i>
+                  </span>
+                  <input 
+                    type="text" 
+                    id="phone" 
+                    class="form-control" 
+                    placeholder="Enter phone number"
+                    formControlName="phone" />
+                </div>
+                <small *ngIf="userForm.get('phone')?.invalid && userForm.get('phone')?.touched" 
+                       class="text-danger">
+                  {{ getFieldError('phone') }}
+                </small>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Role -->
+              <div class="col-md-6 mb-3">
+                <label for="role" class="form-label">Role *</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="fa-solid fa-user-tag"></i>
+                  </span>
+                  <select 
+                    id="role" 
+                    class="form-select" 
+                    formControlName="role">
+                    <option value="User">User</option>
+                    <option value="Admin">Admin</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Form Buttons -->
+            <div class="d-flex justify-content-end gap-2 mt-3">
+              <button 
+                type="button" 
+                class="btn btn-secondary" 
+                (click)="hideForm()">
+                <i class="fa-solid fa-times me-2"></i>Cancel
+              </button>
+              <button 
+                type="submit" 
+                class="btn btn-primary" 
+                [disabled]="userForm.invalid">
+                <i class="fa-solid fa-save me-2"></i>{{ isEditing ? 'Update' : 'Add' }} User
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Users Table -->
+      <div class="card shadow rounded-4">
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead class="table-primary">
+                <tr>
+                  <th scope="col">
+                    <i class="fa-regular fa-user me-2"></i>Username
+                  </th>
+                  <th scope="col">
+                    <i class="fa-regular fa-envelope me-2"></i>Email
+                  </th>
+                  <th scope="col">
+                    <i class="fa-solid fa-phone me-2"></i>Phone
+                  </th>
+                  <th scope="col">
+                    <i class="fa-solid fa-user-tag me-2"></i>Role
+                  </th>
+                  <th scope="col">
+                    <i class="fa-solid fa-toggle-on me-2"></i>Status
+                  </th>
+                  <th scope="col" class="text-center">
+                    <i class="fa-solid fa-cogs me-2"></i>Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (user of users; track user.id) {
+                  <tr [ngClass]="{'table-secondary text-muted': !user.isActive}">
+                    <td>
+                      <strong>{{ user.userName }}</strong>
+                      @if (!user.isActive) {
+                        <span class="badge bg-secondary ms-2">Inactive</span>
+                      }
+                    </td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.phone }}</td>
+                    <td>
+                      <span 
+                        class="badge"
+                        [ngClass]="user.role === 'Admin' ? 'bg-primary' : 'bg-success'">
+                        {{ user.role }}
+                      </span>
+                    </td>
+                    <td>
+                      <div class="toggle-switch" (click)="toggleUserStatus(user)">
+                        <input 
+                          type="checkbox" 
+                          [checked]="user.isActive" 
+                          class="toggle-input" 
+                          readonly>
+                        <span class="toggle-slider">
+                          <span class="toggle-text-left">Off</span>
+                          <span class="toggle-text-right">On</span>
+                        </span>
+                      </div>
+                      <small class="d-block mt-1 text-center status-text" 
+                             [ngClass]="user.isActive ? 'text-success' : 'text-secondary'">
+                        {{ user.isActive ? 'Active' : 'Inactive' }}
+                      </small>
+                    </td>
+                    <td class="text-center">
+                      <div class="btn-group" role="group">
+                        <button 
+                          class="btn btn-sm btn-outline-primary" 
+                          (click)="editUser(user)"
+                          title="Edit User">
+                          <i class="fa-solid fa-edit"></i>
+                        </button>
+                        <button 
+                          class="btn btn-sm btn-outline-danger" 
+                          (click)="deleteUser(user)"
+                          title="Delete User">
+                          <i class="fa-solid fa-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="6" class="text-center py-4 text-muted">
+                      <i class="fa-solid fa-users-slash fa-2x mb-2"></i>
+                      <br>
+                      No users found
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Users Count Summary -->
+      <div class="row mt-3">
+        <div class="col-md-4">
+          <div class="card text-center border-primary">
+            <div class="card-body">
+              <h5 class="card-title text-primary">
+                <i class="fa-solid fa-users"></i>
+              </h5>
+              <h3 class="text-primary">{{ users.length }}</h3>
+              <p class="card-text">Total Users</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-center border-success">
+            <div class="card-body">
+              <h5 class="card-title text-success">
+                <i class="fa-solid fa-user-check"></i>
+              </h5>
+              <h3 class="text-success">{{ activeUsersCount }}</h3>
+              <p class="card-text">Active Users</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-center border-warning">
+            <div class="card-body">
+              <h5 class="card-title text-warning">
+                <i class="fa-solid fa-crown"></i>
+              </h5>
+              <h3 class="text-warning">{{ adminUsersCount }}</h3>
+              <p class="card-text">Administrators</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

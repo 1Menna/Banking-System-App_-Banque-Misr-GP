@@ -2,3 +2,9 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Global modal styles */
+body.modal-open {
+  overflow: hidden;
+  padding-right: 17px; /* Prevent layout shift when scrollbar disappears */
+}

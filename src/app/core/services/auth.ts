@@ -1,39 +1,22 @@
 import { Injectable } from '@angular/core';
 import { UserInterface } from '../user-interface';
+import { UserService } from './user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Auth {
   
-  private users: UserInterface[] = [
-    {
-      id: 0,
-      userName: 'Omar',
-      password: '123456',
-      role: 'User',
-      isActive: true,
-      email: 'omar@gmail.com',
-      phone: '01114316342'
-    },
-    {
-      id: 1,
-      userName: 'Ahmed',
-      password: '123456',
-      role: 'Admin',
-      isActive: true,
-      email: 'ahmed@gmail.com',
-      phone: '01004316342'
-    },
-  ]
-
   private storageKey = 'currentUser';
+
+  constructor(private userService: UserService) {}
 
   login(_userName: string, _password: string): UserInterface | undefined {
     const username = _userName.trim();
     const password = _password.trim();
 
-    const foundUser = this.users.find(
+    const users = this.userService.getAllUsers();
+    const foundUser = users.find(
       user =>
         user.userName.toLowerCase() === username.toLowerCase() &&
         user.password === password &&
