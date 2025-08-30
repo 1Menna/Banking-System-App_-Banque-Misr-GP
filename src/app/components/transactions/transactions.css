@@ -86,3 +86,17 @@ h6{
 .description{
   font-size: 14px;
 } 
+
+.load-more{
+  background-color: #131313;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 10px 0;
+  cursor: pointer;
+  border-radius: 20px;
+}

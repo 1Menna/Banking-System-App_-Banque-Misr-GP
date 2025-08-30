@@ -17,7 +17,15 @@ export class Transactions  {
   query: string='';
   typeFilter: string = ''; 
   selectedTransaction: Transaction | null= null;
-  
+  visibleCount = 10; // initially show 10
+
+  get visibleTransactions() {
+  return this.transactions.slice(0, this.visibleCount);
+  }
+
+  loadMore() {
+  this.visibleCount += 10;
+  }
   constructor(private http: HttpClient) {}
 
   ngOnInit(){

@@ -38,7 +38,7 @@
   </div>
 } @else {
   <div class="stack">
-    @for (t of (transactions | transactionFilter:query:typeFilter); track t.id ) {
+    @for (t of (visibleTransactions | transactionFilter:query:typeFilter); track t.id) {
      <!-- <app-transactions [transactions]="t"></app-transactions> -->
     }
   </div>
@@ -54,7 +54,7 @@
     <p class="text-muted">No transactions found</p>
   } @else {
     <div class="stack">
-      @for (t of (transactions | transactionFilter:query:typeFilter); track t.id) {
+      @for (t of (visibleTransactions | transactionFilter:query:typeFilter); track t.id) {
         <div class="transaction-item card p-3 mb-2" (click)="showDetails(t)">
           <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center gap-3">
@@ -85,6 +85,8 @@
           </div>
         </div>
       }
+      <button class="load-more" (click)="loadMore()" *ngIf="visibleCount < transactions.length">Load More</button>
+
     </div>
   }
 </div>
