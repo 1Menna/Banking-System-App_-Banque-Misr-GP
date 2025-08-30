@@ -36,5 +36,22 @@ export class AccountService {
   addTransaction(transaction: Transaction): Observable<Transaction> {
     return this.http.post<Transaction>(this.transactionUrl, transaction);
   }
+  
+  getTransactions(): Observable<Transaction[]> {
+  return this.http.get<Transaction[]>(this.transactionUrl);
+}
+
+getTransactionById(id: string): Observable<Transaction> {
+  return this.http.get<Transaction>(`${this.transactionUrl}/${id}`);
+}
+
+updateTransaction(id: string, transaction: Transaction): Observable<Transaction> {
+  return this.http.put<Transaction>(`${this.transactionUrl}/${id}`, transaction);
+}
+
+deleteTransaction(id: string): Observable<void> {
+  return this.http.delete<void>(`${this.transactionUrl}/${id}`);
+}
+
 }
 

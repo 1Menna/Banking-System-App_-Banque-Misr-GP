@@ -1,31 +1,55 @@
+// transactions.ts
 import { Component } from '@angular/core';
 import { CommonModule, NgClass } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Transaction } from '../../core/interfaces/transaction-interface';
-import { FormsModule} from '@angular/forms'; 
-import { HttpClient } from '@angular/common/http';
-import { TransactionFilterPipe } from '../../core/pipes/transaction-filter.pipe'; // import pipe
+import { TransactionFilterPipe } from '../../core/pipes/transaction-filter.pipe';
+import { AccountService } from '../../core/services/account';
 
 @Component({
   selector: 'app-transactions',
-  imports: [CommonModule, FormsModule, NgClass, TransactionFilterPipe],
   standalone: true,
+  imports: [CommonModule, FormsModule, NgClass, TransactionFilterPipe],
   templateUrl: './transactions.html',
   styleUrls: ['./transactions.css']
 })
-export class Transactions  {
+export class Transactions {
   transactions: Transaction[] = [];
-  query: string='';
-  typeFilter: string = ''; 
-  selectedTransaction: Transaction | null= null;
-  visibleCount = 10; // initially show 10
+  query: string = '';
+  typeFilter: string = '';
+  selectedTransaction: Transaction | null = null;
+  visibleCount = 10;
 
-  constructor(private http: HttpClient) {}
+  // ✅ new state handling
+  isLoading = false;
+  errorMessage = '';
 
-  ngOnInit(){
-    this.http.get<Transaction[]>('https://68a063076e38a02c58188d9c.mockapi.io/bankingsystem/Transaction')
-      .subscribe(data=> {
-        this.transactions = data; // <-- all 71 transactions loaded here
-      });
+  constructor(private accountService: AccountService) {}
+
+  ngOnInit() {
+    this.fetchTransactions();
+  }
+
+  fetchTransactions() {
+    this.isLoading = true;
+    this.accountService.getTransactions().subscribe({
+      next: data => {
+        this.transactions = data;
+        this.isLoading = false;
+      },
+      error: err => {
+        this.errorMessage = '❌ Failed to load transactions';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  get visibleTransactions() {
+    return this.transactions.slice(0, this.visibleCount);
+  }
+
+  loadMore() {
+    this.visibleCount += 10;
   }
 
   showDetails(t: Transaction) {
@@ -34,12 +58,5 @@ export class Transactions  {
 
   closeDetails() {
     this.selectedTransaction = null;
-  }
-   get visibleTransactions() {
-  return this.transactions.slice(0, this.visibleCount);
-  }
-
-  loadMore() {
-  this.visibleCount += 10;
   }
 }
