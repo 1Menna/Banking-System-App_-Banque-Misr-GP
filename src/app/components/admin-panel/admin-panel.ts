@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, PLATFORM_ID, Inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
@@ -10,7 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { UserService } from '../../core/services/user';
-import { UserInterface } from '../../core/user-interface';
+import { Role, UserInterface } from '../../core/interfaces/user-interface';
 
 @Component({
   selector: 'app-admin-panel',
@@ -36,7 +36,7 @@ export class AdminPanel implements OnInit, OnDestroy {
   
   // Form states
   isEditing = false;
-  editingUserId: number | null = null;
+  editingUserId: string | null = null;
   showAddForm = false;
   
   // Messages
@@ -52,7 +52,9 @@ export class AdminPanel implements OnInit, OnDestroy {
     phone: new FormControl('', [Validators.required])
   });
   
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService,
+      @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
   
   ngOnInit(): void {
     this.loadUsers();
@@ -139,7 +141,7 @@ export class AdminPanel implements OnInit, OnDestroy {
           userName: formData.userName!,
           password: formData.password!,
           email: formData.email!,
-          role: formData.role as 'Admin' | 'User',
+          role: formData.role === 'Admin' ? Role.Admin : Role.User,
           phone: formData.phone!
         });
         
@@ -164,7 +166,7 @@ export class AdminPanel implements OnInit, OnDestroy {
           userName: formData.userName!,
           password: formData.password!,
           email: formData.email!,
-          role: formData.role as 'Admin' | 'User',
+         role: formData.role === 'Admin' ? Role.Admin : Role.User,
           phone: formData.phone!,
           isActive: true
         });
@@ -232,12 +234,16 @@ export class AdminPanel implements OnInit, OnDestroy {
   }
   
   // Modal body scroll management
+  
   private lockBodyScroll(): void {
+     if (isPlatformBrowser(this.platformId)) {
     document.body.classList.add('modal-open');
   }
-  
+  }
   private unlockBodyScroll(): void {
-    document.body.classList.remove('modal-open');
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.classList.remove('modal-open');
+    }
   }
   
   // Form validation helpers

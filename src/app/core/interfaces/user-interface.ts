@@ -1,8 +1,13 @@
+
+export enum Role {
+  Admin = 'Admin',
+  User = 'User'
+}
 export interface UserInterface {
-  id: number;
+  id: string;
   userName: string;
   password: string;
-  role: 'Admin' | 'User';
+  role: Role;
   isActive: boolean;
   email: string;
   phone: string;

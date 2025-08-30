@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Auth } from '../../core/services/auth';
-import { UserInterface } from '../../core/user-interface';
+import { UserInterface } from '../../core/interfaces/user-interface';
 
 
 @Component({

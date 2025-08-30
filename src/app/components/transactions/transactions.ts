@@ -1,6 +1,6 @@
 import { Component, Input, computed, signal } from '@angular/core';
 import { CommonModule, NgClass } from '@angular/common';
-import { Transaction, TransactionType } from '../../core/transaction-interface';
+import { Transaction, TransactionType } from '../../core/interfaces/transaction-interface';
 import { FormsModule} from '@angular/forms'; 
 import { HttpClient } from '@angular/common/http';
 

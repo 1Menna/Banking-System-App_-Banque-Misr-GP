@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Auth } from '../../core/services/auth';
-import { UserInterface } from '../../core/user-interface';
+import { UserInterface } from '../../core/interfaces/user-interface';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgIf } from '@angular/common';

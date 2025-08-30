@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Auth } from '../../core/services/auth';
-import { UserInterface } from '../../core/user-interface';
+import { UserInterface } from '../../core/interfaces/user-interface';
 
 @Component({
   selector: 'app-admin-nav',
