@@ -1,6 +1,6 @@
 <div class="account-container">
 
-  <!-- Account Overview -->
+ 
   <div class="account-card">
     <div class="d-flex">
       <a class="navbar-brand text-dark">
@@ -13,21 +13,21 @@
     <div class="account-info col-lg-8 col-md-12 col-12 d-flex justify-content-between">
       <div class="account-item">
         <p class="text-secondary fw-bold"> Account Number</p>
-        <p class="fw-bold">{{ account.accountNumber }}</p>
+        <p class="fw-bold">{{ account?.accountNo }}</p>
       </div>
       <div class="account-item">
         <p class="text-secondary fw-bold"> Account Type </p>
-        <p class="accountType text-white text-center">{{ account.accountType }}</p>
+        <p class="accountType text-white text-center">{{ account?.accountType }}</p>
 
       </div>
       <div class="account-item">
         <p class="text-secondary fw-bold"> Current Balance</p>
-        <p class="balance">{{ account.balance | currency:'USD' }}</p>
+        <p class="balance">{{ account?.balance | currency:'USD' }}</p>
       </div>
     </div>
   </div>
 
-  <!-- Recent Transactions -->
+ 
   <div class="account-card">
     <h6>Recent Transactions</h6>
     <p class="subtitle">Your latest account activity</p>
@@ -36,7 +36,7 @@
       <div class="transaction" *ngFor="let t of transactions" [ngClass]="t.type">
         <div class="icon_and_left">
            <div class="icon">
-            @if(t.type=="credit"){
+            @if(t.type === 'Credit'){
             <a class="navbar-brand text-success me-2 card_icon card_Back_icon">
                <i class="upper-arrow fa-solid fa-arrow-trend-up"></i>
             </a>
@@ -53,14 +53,14 @@
             </div>
         </div>
         <div class="tx-amount">
-          @if(t.type=="credit"){
+          @if(t.type === "Credit"){
             <span>+ </span>
           }@else{
             <span> - </span>
           }
           {{ t.amount | currency:'USD' }}
           <div class="type">
-            {{ t.type === 'credit' ? 'Credit' : 'Debit' }}</div>
+            {{ t.type === 'Credit' ? 'Credit' : 'Debit' }}</div>
         </div>
       </div>
     </div>

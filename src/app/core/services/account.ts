@@ -14,7 +14,7 @@ export class AccountService {
   constructor(private http: HttpClient) {}
 
 
-  getAccounts(): Observable<AccountInterface[]> {
+  getAllAccounts(): Observable<AccountInterface[]> {
     return this.http.get<AccountInterface[]>(this.accountUrl);
   }
 
@@ -25,7 +25,11 @@ export class AccountService {
   updateAccount(id: string, account: AccountInterface): Observable<AccountInterface> {
     return this.http.put<AccountInterface>(`${this.accountUrl}/${id}`, account);
   }
-
+   
+   deleteAccount(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.accountUrl}/${id}`);
+  }
+  
 
   getTransactionsByAccount(accountNo: string): Observable<Transaction[]> {
     return this.http.get<Transaction[]>(this.transactionUrl, {

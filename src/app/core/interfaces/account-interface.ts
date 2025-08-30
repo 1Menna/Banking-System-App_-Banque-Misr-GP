@@ -14,15 +14,3 @@ export enum AccountType {
   Current = 'Current'
 }
 
-// @Injectable({
-//   providedIn: 'root'
-// })
-// export class AccountService {
-//   private apiUrl = 'https://68a063076e38a02c58188d9c.mockapi.io/bankingsystem/Account'; 
-
-//   constructor(private http: HttpClient) {}
-
-//   getAccounts(): Observable<AccountInterface[]> {
-//     return this.http.get<AccountInterface[]>(this.apiUrl);
-//   }
-// }

@@ -20,7 +20,7 @@ export class Transactions {
   selectedTransaction: Transaction | null = null;
   visibleCount = 10;
 
-  // ✅ new state handling
+  // new state handling
   isLoading = false;
   errorMessage = '';
 
@@ -38,7 +38,7 @@ export class Transactions {
         this.isLoading = false;
       },
       error: err => {
-        this.errorMessage = '❌ Failed to load transactions';
+        this.errorMessage = ' Failed to load transactions';
         this.isLoading = false;
       }
     });
