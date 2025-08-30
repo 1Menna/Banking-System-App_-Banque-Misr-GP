@@ -10,14 +10,14 @@
     </div>
     <p class="subtitle text-secondary">Your account details and current balance</p>
 
-    <div class="account-info">
+    <div class="account-info col-lg-8 col-md-12 col-12 d-flex justify-content-between">
       <div class="account-item">
         <p class="text-secondary fw-bold"> Account Number</p>
         <p class="fw-bold">{{ account.accountNumber }}</p>
       </div>
       <div class="account-item">
         <p class="text-secondary fw-bold"> Account Type </p>
-        <p class="bg-success text-white rounded text-center">{{ account.accountType }}</p>
+        <p class="accountType text-white text-center">{{ account.accountType }}</p>
 
       </div>
       <div class="account-item">
@@ -29,7 +29,7 @@
 
   <!-- Recent Transactions -->
   <div class="account-card">
-    <h2>Recent Transactions</h2>
+    <h6>Recent Transactions</h6>
     <p class="subtitle">Your latest account activity</p>
 
     <div class="transactions">
@@ -38,7 +38,7 @@
            <div class="icon">
             @if(t.type=="credit"){
             <a class="navbar-brand text-success me-2 card_icon card_Back_icon">
-               <i class="fa-solid fa-arrow-trend-up"></i>
+               <i class="upper-arrow fa-solid fa-arrow-trend-up"></i>
             </a>
             }
             @else{
@@ -59,7 +59,8 @@
             <span> - </span>
           }
           {{ t.amount | currency:'USD' }}
-          <span class="type">{{ t.type === 'credit' ? 'Credit' : 'Debit' }}</span>
+          <div class="type">
+            {{ t.type === 'credit' ? 'Credit' : 'Debit' }}</div>
         </div>
       </div>
     </div>

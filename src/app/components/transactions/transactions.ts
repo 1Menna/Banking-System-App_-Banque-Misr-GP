@@ -19,13 +19,6 @@ export class Transactions  {
   selectedTransaction: Transaction | null= null;
   visibleCount = 10; // initially show 10
 
-  get visibleTransactions() {
-  return this.transactions.slice(0, this.visibleCount);
-  }
-
-  loadMore() {
-  this.visibleCount += 10;
-  }
   constructor(private http: HttpClient) {}
 
   ngOnInit(){
@@ -41,5 +34,12 @@ export class Transactions  {
 
   closeDetails() {
     this.selectedTransaction = null;
+  }
+   get visibleTransactions() {
+  return this.transactions.slice(0, this.visibleCount);
+  }
+
+  loadMore() {
+  this.visibleCount += 10;
   }
 }
