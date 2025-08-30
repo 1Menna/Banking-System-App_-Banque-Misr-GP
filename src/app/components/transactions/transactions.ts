@@ -1,12 +1,13 @@
-import { Component, Input, computed, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule, NgClass } from '@angular/common';
-import { Transaction, TransactionType } from '../../core/interfaces/transaction-interface';
+import { Transaction } from '../../core/interfaces/transaction-interface';
 import { FormsModule} from '@angular/forms'; 
 import { HttpClient } from '@angular/common/http';
+import { TransactionFilterPipe } from '../../core/pipes/transaction-filter.pipe'; // import pipe
 
 @Component({
   selector: 'app-transactions',
-  imports: [CommonModule, FormsModule,NgClass],
+  imports: [CommonModule, FormsModule, NgClass, TransactionFilterPipe],
   standalone: true,
   templateUrl: './transactions.html',
   styleUrls: ['./transactions.css']
@@ -14,35 +15,23 @@ import { HttpClient } from '@angular/common/http';
 export class Transactions  {
   transactions: Transaction[] = [];
   query: string='';
-  typeFilter: string = ''; // 'Credit' | 'Debit' | ''
+  typeFilter: string = ''; 
   selectedTransaction: Transaction | null= null;
   
-
-constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
   ngOnInit(){
-    this.http.get<Transaction[]>('https://68a063076e38a02c58188d9c.mockapi.io/bankingsystem/Transaction').subscribe(data=> {
-      this.transactions = data;
-    })
+    this.http.get<Transaction[]>('https://68a063076e38a02c58188d9c.mockapi.io/bankingsystem/Transaction')
+      .subscribe(data=> {
+        this.transactions = data; // <-- all 71 transactions loaded here
+      });
   }
 
-  filtered(): Transaction[] {
-    const q=this.query.trim().toLowerCase();
-
-    return this.transactions.filter(t =>{
-      const matchType  = !this.typeFilter || t.type === this.typeFilter as TransactionType;
-      const matchText = !q || t.description.toLocaleLowerCase().includes(q);
-      return matchType  && matchText;
-    });
-  }
-    showDetails(t: Transaction) {
+  showDetails(t: Transaction) {
     this.selectedTransaction = t;
   }
 
   closeDetails() {
     this.selectedTransaction = null;
   }
-  get filteredTransactions(): Transaction[] {
-  return this.filtered();
-}
 }

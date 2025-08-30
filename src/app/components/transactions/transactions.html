@@ -17,7 +17,7 @@
     <input type="text" [(ngModel)]="query" class="search-field" 
     placeholder=" Search by description..."/> 
     <small class="text-muted">
-      Showing {{filtered().length}} of {{transactions.length}} transactions
+      Showing {{(transactions | transactionFilter:query:typeFilter).length}} of {{transactions.length}} transactions
     </small>
    </div>
    <div class="transaction-type">
@@ -32,13 +32,13 @@
   </div>
 </div>
 
-@if (filtered().length === 0) {
+@if ((transactions | transactionFilter:query:typeFilter).length === 0) {
   <div class="text-muted">
     No transactions found.
   </div>
 } @else {
   <div class="stack">
-    @for (t of filtered(); track t.id ) {
+    @for (t of (transactions | transactionFilter:query:typeFilter); track t.id ) {
      <!-- <app-transactions [transactions]="t"></app-transactions> -->
     }
   </div>
@@ -48,13 +48,13 @@
   <div class="card-design">
      <div class="transactions mt-4">
   <h6>Transactions</h6>
-  <p class="transactions-no">{{ filtered().length }} transactions found</p>
+  <p class="transactions-no">{{ (transactions | transactionFilter:query:typeFilter).length }} transactions found</p>
 
-  @if (filtered().length === 0) {
+  @if ((transactions | transactionFilter:query:typeFilter).length === 0) {
     <p class="text-muted">No transactions found</p>
   } @else {
     <div class="stack">
-      @for (t of filtered(); track t.id) {
+      @for (t of (transactions | transactionFilter:query:typeFilter); track t.id) {
         <div class="transaction-item card p-3 mb-2" (click)="showDetails(t)">
           <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center gap-3">
