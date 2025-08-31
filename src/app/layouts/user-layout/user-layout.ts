@@ -5,10 +5,11 @@ import { MyAccount } from "../../components/my-account/my-account";
 import { Transactions } from "../../components/transactions/transactions";
 import { Transfer } from "../../components/transfer/transfer";
 import { RouterOutlet } from '@angular/router';
+import { Footer } from '../../components/footer/footer';
 
 @Component({
   selector: 'app-user-layout',
-  imports: [UserNav,RouterOutlet],
+  imports: [UserNav,RouterOutlet,Footer],
   templateUrl: './user-layout.html',
   styleUrl: './user-layout.css'
 })
