@@ -128,4 +128,12 @@ export class Transactions {
   refreshTransactions() {
     this.loadUserAccounts();
   }
+  onDelete(id: string) {
+    if(confirm('Are you sure you want to delete this transaction?')) {
+      this.accountService.deleteTransaction(id).subscribe(() => {
+        this.transactions = this.transactions.filter(tx => tx.id !== id);
+        alert('Transaction deleted successfully');
+      });
+    }
+  }
 }
