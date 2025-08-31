@@ -74,7 +74,7 @@
   } @else {
     <div class="stack">
       @for (t of (visibleTransactions | transactionFilter:query:typeFilter); track t.id) {
-        <div class="transaction-item card p-3 mb-2 " (click)="showDetails(t)">
+        <div class="transaction-item card p-3 mb-2" (click)="showDetails(t)">
           <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center gap-3">
               <div class="icon">
@@ -101,27 +101,17 @@
                 {{ t.amount| currency:'USD':'symbol' }}
               </p>
               <p class="text-muted mb-0">Transaction ID: {{ t.id }}</p>
-              <button class="btn btn-danger btn-sm" (click)="onDelete(t.id, $event)">Delete</button>
-         <!-- <button (click)="onDelete((t.id))" class="btn btn-danger btn-sm">Delete</button> -->
+               <button (click)="onDelete((t.id))" class="btn btn-danger btn-sm">Delete</button>
             </div>
-            
+             <!-- <button (click)="onDelete((t.id))" class="btn btn-danger btn-sm">Delete</button> -->
           </div>
         </div>
-        
       }
-      
-      <!-- <button class="load-more" (click)="loadMore()" *ngIf="visibleCount < transactions.length">Load More</button> -->
+      <button class="load-more" (click)="loadMore()" *ngIf="visibleCount < transactions.length">Load More</button>
 
     </div>
   }
 </div>
-<<<<<<< HEAD
-<div *ngIf="showToast" class="toast-message p-2 bg-success text-white position-fixed bottom-0 end-0 m-3 rounded">
-  {{ toastMessage }}
-</div>
-
-=======
->>>>>>> d4498a4938d60b64a9412a601212756bccd2e396
 @if (selectedTransaction) {
   <div class="custom-modal-overlay" (click)="closeDetails()"></div>
 
