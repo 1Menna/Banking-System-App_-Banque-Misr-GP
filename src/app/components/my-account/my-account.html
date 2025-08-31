@@ -10,18 +10,18 @@
     </div>
     <p class="subtitle text-secondary">Your account details and current balance</p>
 
-    <div class="account-info col-lg-8 col-md-12 col-12 d-flex justify-content-between">
-      <div class="account-item">
-        <p class="text-secondary fw-bold"> Account Number</p>
-        <p class="fw-bold">{{ account?.accountNo }}</p>
+    <div class="account-info col-lg-8 col-md-12 col-12 d-flex justify-content-between ">
+      <div class="account-item ">
+        <p class="text-secondary fw-bold mb-1"> Account Number</p>
+        <p class="fw-bold ">{{ account?.accountNo }}</p>
       </div>
-      <div class="account-item">
-        <p class="text-secondary fw-bold"> Account Type </p>
+      <div class="account-item ">
+        <p class="text-secondary fw-bold mb-1"> Account Type </p>
         <p class="accountType text-white text-center">{{ account?.accountType }}</p>
 
       </div>
       <div class="account-item">
-        <p class="text-secondary fw-bold"> Current Balance</p>
+        <p class="text-secondary fw-bold mb-1"> Current Balance</p>
         <p class="balance">{{ account?.balance | currency:'USD' }}</p>
       </div>
     </div>
@@ -33,7 +33,10 @@
     <p class="subtitle">Your latest account activity</p>
 
     <div class="transactions">
-      <div class="transaction" *ngFor="let t of transactions" [ngClass]="t.type">
+       <p *ngIf="displayedTransactions.length === 0" class="text-center text-secondary">
+    No transactions found.
+  </p>
+      <div class="transaction" *ngFor="let t of displayedTransactions" [ngClass]="t.type">
         <div class="icon_and_left">
            <div class="icon">
             @if(t.type === 'Credit'){
@@ -48,22 +51,29 @@
             }
             </div>
             <div class="tx-left">
-              <p class="tx-title">{{ t.description }}</p>
-              <p class="tx-date">{{ t.date }}</p>
+              <p class="tx-title ">{{ t.description }}</p>
+              <p class="tx-date">{{ t.date|date:"longDate" }}</p>
             </div>
         </div>
         <div class="tx-amount">
-          @if(t.type === "Credit"){
-            <span>+ </span>
-          }@else{
-            <span> - </span>
-          }
-          {{ t.amount | currency:'USD' }}
-          <div class="type">
+        
+          <p [ngClass]="t.type === 'Credit' ? 'text-success' : 'text-danger'" class="fw-bold mb-1">
+                {{t.type === 'Credit' ? '+' : '--'}}
+                {{ t.amount| currency:'USD':'symbol' }}
+              </p>
+          
+          <div class="type d-flex justify-content-center">
             {{ t.type === 'Credit' ? 'Credit' : 'Debit' }}</div>
         </div>
       </div>
+        
     </div>
+    <button *ngIf="displayedTransactions.length < transactions.length"
+          (click)="loadMore()"
+          class="btn btn-primary  mt-3 ">
+    Load More
+  </button>
   </div>
+   
 
 </div>

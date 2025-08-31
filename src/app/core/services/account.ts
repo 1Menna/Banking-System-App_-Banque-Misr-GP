@@ -38,10 +38,14 @@ export class AccountService {
   }
 
   getTransactionsByAccount(accountNo: string): Observable<Transaction[]> {
-    return this.http.get<Transaction[]>(this.transactionUrl, {
-      params: { fromAccountNo: accountNo }
-    });
-  }
+  return this.http.get<Transaction[]>(this.transactionUrl).pipe(
+    map(transactions =>
+      transactions.filter(
+        tx => tx.fromAccountNo === accountNo || tx.ToAccountNo === accountNo
+      )
+    )
+  );
+}
 
   addTransaction(transaction: Omit<Transaction, 'id'>): Observable<Transaction> {
     console.log('Creating transaction:', JSON.stringify(transaction, null, 2));

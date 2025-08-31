@@ -1,4 +1,4 @@
-.account-container {
+/* .account-container {
  max-width: 98%;
  margin-left:15px;
  margin-top: 20px;
@@ -43,7 +43,7 @@ h2 {
   font-weight: bold;
 }
 
-/* Transactions */
+
 .transactions {
   display: flex;
   flex-direction: column;
@@ -98,13 +98,6 @@ h2 {
   font-size: 15px;
 }
 
-.transaction.credit .tx-amount {
-  color: #05BD83;
-}
-
-.transaction.debit .tx-amount {
-  color: red;
-}
 
 .type {
   color: black;
@@ -118,4 +111,99 @@ h2 {
 h6{
   font-weight: 600;
   font-size: 16px;
+} */
+ .account-container {
+  max-width: 98%;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+}
+
+.account-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #e0e0e0;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #928f8f;
+  margin-bottom: 20px;
+}
+
+.account-info {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.account-item {
+  font-size: 15px;
+  color: #333;
+}
+
+.balance {
+  font-size: 20px;
+  color: #05BD83;
+  font-weight: bold;
+}
+
+/* Transactions */
+.transactions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.transaction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.icon_and_left {
+  display: flex;
+  gap: 6px;
+}
+
+.tx-title {
+  font-weight: bold;
+  font-size: 14px;
+  margin: 0;
+}
+
+.tx-date {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+}
+
+.tx-amount {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.type {
+  font-size: 12px;
+  padding: 2px 6px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  margin-left: 24px;
+}
+
+/* دي اللي بتحط اللون حسب نوع المعاملة */
+
+.accountType {
+  background-color: #05BD83;
+  border-radius: 12px;
+  padding: 2px 8px;
+  display: inline-block;
+
 }
