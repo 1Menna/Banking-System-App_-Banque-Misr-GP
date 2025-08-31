@@ -111,22 +111,63 @@
     </div>
   }
 </div>
-
 @if (selectedTransaction) {
-  <div class="transaction-details card mt-4 p-3">
-    <h6>Transaction Details</h6>
-    <p><strong>ID:</strong> {{ selectedTransaction.id }}</p>
-    <p><strong>Description:</strong> {{ selectedTransaction.description }}</p>
-    <p><strong>Type:</strong> {{ selectedTransaction.type }}</p>
-    <p><strong>Amount:</strong>
-      <span [ngClass]="selectedTransaction.type === 'Credit' ? 'text-success' : 'text-danger'">
-        {{ selectedTransaction.amount | currency:'USD':'symbol' }}
-      </span>
-    </p>
-    <p><strong>Date:</strong> {{ selectedTransaction.date }}</p>
+  <div class="custom-modal-overlay" (click)="closeDetails()"></div>
 
-    <button class="btn btn-sm btn-secondary mt-2" (click)="closeDetails()">Close</button>
+  <div class="custom-modal">
+    <div class="modal-header">
+      <h5 class="modal-title">
+        <i class="fas fa-info-circle me-2 mb-1"></i>
+        Transaction Details
+      </h5>
+      <button type="button" class="btn-close" (click)="closeDetails()"></button>
+    </div>
+
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-6">
+          <p><strong>Transaction ID:</strong> {{ selectedTransaction.id }}</p>
+          <p><strong>Description:</strong> {{ selectedTransaction.description }}</p>
+          <p><strong>Type:</strong>
+            <span class="badge"
+                  [ngClass]="{
+                    'bg-success': selectedTransaction.type === 'Credit',
+                    'bg-danger': selectedTransaction.type === 'Debit'
+                  }">
+              {{ selectedTransaction.type }}
+            </span>
+          </p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Amount:</strong>
+            <span class="h5"
+                  [ngClass]="{
+                    'text-success': selectedTransaction.type === 'Credit',
+                    'text-danger': selectedTransaction.type === 'Debit'
+                  }">
+              {{ selectedTransaction.type === 'Credit' ? '+' : '-' }}
+              {{ selectedTransaction.amount | currency:'USD':'symbol':'1.2-2' }}
+            </span>
+          </p>
+          <p><strong>Date:</strong> {{ selectedTransaction.date | date:'fullDate' }}</p>
+          <p><strong>Time:</strong> {{ selectedTransaction.date | date:'shortTime' }}</p>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-md-6">
+          <p><strong>From Account:</strong> {{ selectedTransaction.fromAccountNo }}</p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>To Account:</strong> {{ selectedTransaction.ToAccountNo }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="closeDetails()">
+        <i class="fas fa-times me-1"></i> Close
+      </button>
+    </div>
   </div>
 }
-  </div>
-</div> 
