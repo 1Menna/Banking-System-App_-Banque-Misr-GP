@@ -32,21 +32,19 @@ export class Transfer implements OnInit, OnDestroy {
 
   private subs = new Subscription();
 
-  constructor(private fb: FormBuilder, private accountService: AccountService) {}
+  constructor(private fb: FormBuilder, private accountService: AccountService) { }
 
   ngOnInit() {
     this.transferForm = this.fb.group({
-      fromAccount: [null, Validators.required],  // will hold AccountInterface object
-      toAccount: [null, Validators.required],    // will hold AccountInterface object
+      fromAccount: [null, Validators.required],   // full AccountInterface object
+      toAccount: [null, Validators.required],     // full AccountInterface object
       amount: [null, [Validators.required, Validators.min(1)]],
       description: ['']
     });
 
-    // IMPORTANT: load accounts and transactions so userAccounts is populated
     this.loadAccounts();
     this.loadTransactions();
 
-    // keep selectedFromAccount in sync and update amount validator to not exceed balance
     const fromCtrl = this.transferForm.get('fromAccount');
     if (fromCtrl) {
       this.subs.add(
@@ -70,36 +68,33 @@ export class Transfer implements OnInit, OnDestroy {
     this.subs.unsubscribe();
   }
 
-  // safer: read selected account value from the form control
-  onFromAccountChange() {
-    const acc = this.transferForm.get('fromAccount')?.value as AccountInterface | null;
-    this.selectedFromAccount = acc;
-    const amountCtrl = this.transferForm.get('amount');
-    if (amountCtrl && acc && amountCtrl.value && amountCtrl.value > acc.balance) {
-      amountCtrl.setValue(null);
-    }
-  }
-
   // ---------------- Accounts ----------------
-loadAccounts() {
-  this.accountService.getAllAccounts().subscribe({
-    next: (accounts) => {
-      this.accounts = accounts || [];
+  loadAccounts() {
+    this.accountService.getAllAccounts().subscribe({
+      next: (accounts) => {
+        this.accounts = accounts || [];
 
-      const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-      const userId = currentUser?.id;
+        let currentUser: any = null;
+        try {
+          currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        } catch {
+          currentUser = null;
+        }
+        const userId = currentUser?.id;
 
-      this.userAccounts = this.accounts.filter(acc => acc.userId?.toString() === userId?.toString());
+        this.userAccounts = this.accounts.filter(
+          acc => acc.userId?.toString() === userId?.toString()
+        );
 
-      console.log('all accounts:', this.accounts);
-      console.log('userAccounts:', this.userAccounts);
-    },
-    error: (err) => {
-      this.errorMessage = 'Failed to load accounts';
-      console.error(err);
-    }
-  });
-}
+        console.log('all accounts:', this.accounts);
+        console.log('userAccounts:', this.userAccounts);
+      },
+      error: (err) => {
+        this.errorMessage = 'Failed to load accounts';
+        console.error(err);
+      }
+    });
+  }
 
   // ---------------- Transactions ----------------
   loadTransactions() {
@@ -138,9 +133,10 @@ loadAccounts() {
 
     const sender: AccountInterface | null = fromAccount;
     const receiver: AccountInterface | null = toAccount;
+    const amt = Number(amount);
 
     if (!sender || !receiver) {
-      this.error = 'Invalid account selected.';
+      this.error = '❌ Invalid account selected.';
       return;
     }
 
@@ -149,29 +145,42 @@ loadAccounts() {
       return;
     }
 
-    if (amount > sender.balance) {
+    if (isNaN(amt) || amt <= 0) {
+      this.error = '❌ Invalid transfer amount.';
+      return;
+    }
+
+    if (amt > (sender.balance ?? 0)) {
       this.error = '❌ Insufficient balance.';
       return;
     }
 
-    this.accountService.fundTransfer(sender, receiver, amount, description).subscribe({
+    this.accountService.fundTransfer(sender, receiver, amt, description).subscribe({
       next: (res) => {
-        // res: { sender, receiver, debitTx, creditTx } per your service map
-        const debitTx: Transaction = res.debitTx;
-        const creditTx: Transaction = res.creditTx;
-        const updatedSender = res.sender || { ...sender, balance: sender.balance - amount };
-        const updatedReceiver = res.receiver || { ...receiver, balance: receiver.balance + amount };
+        // Expect backend to return { sender, receiver, debitTx, creditTx }
+        const updatedSender: AccountInterface = res.sender ?? { ...sender, balance: sender.balance - amt };
+        const updatedReceiver: AccountInterface = res.receiver ?? { ...receiver, balance: receiver.balance + amt };
+        const debitTx: Transaction | null = res.debitTx ?? null;
+        const creditTx: Transaction | null = res.creditTx ?? null;
 
-        // update local accounts arrays (so UI updates immediately)
+        // update local accounts arrays
         this.accounts = this.accounts.map(acc => {
           if (acc.id === updatedSender.id) return updatedSender;
           if (acc.id === updatedReceiver.id) return updatedReceiver;
           return acc;
         });
-        this.userAccounts = this.userAccounts.map(acc => acc.id === updatedSender.id ? updatedSender : acc);
 
-        // add transactions to top
-        this.transactions.unshift(debitTx, creditTx);
+        this.userAccounts = this.userAccounts.map(acc =>
+          acc.id === updatedSender.id ? updatedSender : acc
+        );
+
+        // add transactions if not already in list
+        if (debitTx && !this.transactions.find(tx => tx.id === debitTx.id)) {
+          this.transactions.unshift(debitTx);
+        }
+        if (creditTx && !this.transactions.find(tx => tx.id === creditTx.id)) {
+          this.transactions.unshift(creditTx);
+        }
         this.updateVisibleTransactions();
 
         this.message = '✅ Transfer successful!';
@@ -181,7 +190,7 @@ loadAccounts() {
       },
       error: (err) => {
         console.error(err);
-        this.error = err?.message ?? '❌ Transfer failed.';
+        this.error = err?.error?.message ?? err?.message ?? '❌ Transfer failed.';
         this.message = '';
       }
     });
@@ -194,4 +203,17 @@ loadAccounts() {
   closeDetails() {
     this.selectedTransaction = null;
   }
+
+  onFromAccountChange() {
+  const acc = this.transferForm.get('fromAccount')?.value as AccountInterface | null;
+  this.selectedFromAccount = acc;
+
+  const amountCtrl = this.transferForm.get('amount');
+  if (amountCtrl && acc) {
+    if (amountCtrl.value && Number(amountCtrl.value) > (acc.balance ?? 0)) {
+      amountCtrl.setValue(null);
+    }
+  }
+}
+
 }
