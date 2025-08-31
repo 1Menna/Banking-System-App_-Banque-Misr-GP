@@ -44,6 +44,19 @@
   border-style: none;
   color: rgb(201, 203, 203);
   margin-bottom: 20px;
+    margin-left: 5px;
+
+}
+
+.search-field:hover {
+  box-shadow: 0 0 6px rgba(160, 166, 172, 0.837);
+  border-radius: 6px;
+}
+.search-field:focus {
+  outline: none;
+  box-shadow: 0 0 8px rgba(160, 166, 172, 0.837);
+    border-radius: 6px;
+
 }
 
 .search{
@@ -121,7 +134,7 @@ h6{
   width: 600px;
   max-width: 90%;
   border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
   z-index: 1050;
   padding: 1rem;
 }
