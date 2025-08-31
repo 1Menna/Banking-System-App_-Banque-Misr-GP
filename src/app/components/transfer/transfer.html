@@ -1,1 +1,89 @@
-<p>transfer works!</p>
+
+    <div class="title ms-3">
+      <i class=" icon fa-solid fa-arrow-right-arrow-left"></i>
+      <h5 class="mb-0 fw-bold">Fund Transfer</h5>
+      <p class="mb-0 text-muted">Transfer money between accounts securely</p>
+    </div>
+
+  <div class="container mt-4">
+    <div class="row">
+      <!-- Left: Transfer Form -->
+      <div class="col-md-6">
+        <div class="card shadow-sm p-3">
+          <h5 class="mb-3"><i class="fa-solid fa-dollar-sign"></i> Transfer Details</h5>
+          <form [formGroup]="transferForm" (ngSubmit)="onSubmit()">
+
+            <!-- From Account -->
+  <div class="mb-3">
+    <label class="form-label">From Account</label>
+    <select class="form-select" formControlName="fromAccount" (change)="onFromAccountChange()">
+      <option [ngValue]="null">Select source account</option>
+      <option *ngFor="let acc of userAccounts" [ngValue]="acc">
+        {{ acc.accountType }} ({{ acc.accountNo }}) - {{ acc.balance | currency }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Show balance after selection -->
+  <div *ngIf="selectedFromAccount" class="mt-2 text-muted">
+    Available Balance: <strong>{{ selectedFromAccount.balance | currency }}</strong>
+  </div>
+
+  <!-- To Account -->
+  <div class="mb-3">
+    <label class="form-label">To Account</label>
+    <select class="form-select" formControlName="toAccount">
+      <option [ngValue]="null">Select destination account</option>
+      <option *ngFor="let acc of accounts" [ngValue]="acc">
+        {{ acc.accountType }} ({{ acc.accountNo }})
+      </option>
+    </select>
+  </div>
+
+          <!-- Amount -->
+          <div class="mb-3">
+            <label class="form-label">Amount</label>
+            <input type="number" class="form-control" formControlName="amount" />
+          </div>
+
+          <!-- Description -->
+          <div class="mb-3">
+            <label class="form-label">Description (Optional)</label>
+            <input type="text" class="form-control" formControlName="description" />
+          </div>
+
+          <!-- Submit -->
+          <button class="btn btn-primary w-100" type="submit" [disabled]="transferForm.invalid">
+            Transfer Funds
+          </button>
+        </form>
+
+        <!-- Feedback -->
+        <div *ngIf="message" class="alert alert-success mt-3">{{ message }}</div>
+        <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
+      </div>
+    </div>
+
+    <!-- Right: Accounts -->
+    <div class="col-md-6">
+      <div class="card shadow-sm p-3">
+        <h5>Your Accounts</h5>
+        <p class="text-muted">Current balances for your accounts</p>
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-center"
+              *ngFor="let acc of userAccounts">
+            <div>
+              <strong>{{ acc.accountType }}</strong><br>
+              <small>Account No: {{ acc.accountNo }}</small>
+            </div>
+            <span [ngClass]="{'text-success': acc.balance > 0, 'text-danger': acc.balance <= 0}">
+              {{ acc.balance | currency }}
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      
+    </div>
+  </div>
+</div>

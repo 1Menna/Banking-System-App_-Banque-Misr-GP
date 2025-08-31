@@ -8,7 +8,8 @@ import { Auth } from '../../core/services/auth';
 @Component({
   selector: 'app-my-account',
   standalone: true,
-  imports: [CurrencyPipe, NgFor, NgClass,DatePipe],
+  imports: [CurrencyPipe, NgFor, NgClass, ],
+  // DatePipe
   templateUrl: './my-account.html',
   styleUrls: ['./my-account.css']
 })

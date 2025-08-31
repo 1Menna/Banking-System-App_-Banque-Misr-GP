@@ -1,0 +1,13 @@
+.title{
+  width: auto;
+  text-align: center;
+  align-items: center;
+}
+.icon{
+  color: #4578DE;
+  background-color: #E3F6FF;
+  padding: 10px;
+  border-radius: 50%;
+ align-items: center;
+ margin-top: 10px;
+}
