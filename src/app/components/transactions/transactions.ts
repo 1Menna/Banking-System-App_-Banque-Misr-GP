@@ -27,6 +27,8 @@ export class Transactions {
   // new state handling
   isLoading = false;
   errorMessage = '';
+  toastMessage: string = '';
+  showToast: boolean = false;
 
   constructor(
     private accountService: AccountService,
@@ -128,12 +130,16 @@ export class Transactions {
   refreshTransactions() {
     this.loadUserAccounts();
   }
-  onDelete(id: string) {
-    if(confirm('Are you sure you want to delete this transaction?')) {
-      this.accountService.deleteTransaction(id).subscribe(() => {
-        this.transactions = this.transactions.filter(tx => tx.id !== id);
-        alert('Transaction deleted successfully');
-      });
-    }
+onDelete(id: string, event: Event) {
+  event.stopPropagation();
+  if(confirm('Are you sure you want to delete this transaction?')) {
+    this.accountService.deleteTransaction(id).subscribe(() => {
+      this.userTransactions = this.userTransactions.filter(tx => tx.id !== id);
+      this.transactions = this.transactions.filter(tx => tx.id !== id);
+
+      this.toastMessage = 'Transaction deleted successfully';
+      this.showToast = true;
+      setTimeout(() => this.showToast = false, 3000);
+    });
   }
-}
+}}
