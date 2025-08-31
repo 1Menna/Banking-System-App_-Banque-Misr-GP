@@ -449,7 +449,9 @@ export class UserService {
     role?: 'Admin' | 'User';
     isActive?: boolean;
   }): UserInterface[] {
+    console.log('UserService.searchUsers called with:', { searchTerm, filters });
     let filteredUsers = this.users;
+    console.log('Total users before filtering:', filteredUsers.length);
 
     // Apply text search
     if (searchTerm) {
@@ -459,18 +461,23 @@ export class UserService {
         user.email.toLowerCase().includes(term) ||
         user.phone.includes(term)
       );
+      console.log('Users after text search:', filteredUsers.length);
     }
 
     // Apply filters
     if (filters) {
       if (filters.role) {
         filteredUsers = filteredUsers.filter(user => user.role === filters.role);
+        console.log('Users after role filter:', filteredUsers.length);
       }
       if (filters.isActive !== undefined) {
+        console.log('Applying isActive filter:', filters.isActive);
         filteredUsers = filteredUsers.filter(user => user.isActive === filters.isActive);
+        console.log('Users after isActive filter:', filteredUsers.length);
       }
     }
 
+    console.log('Final filtered users:', filteredUsers.length);
     return filteredUsers;
   }
 

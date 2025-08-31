@@ -110,8 +110,8 @@
                   (change)="onFilterChange()"
                   [disabled]="isLoading">
                   <option value="">All Status</option>
-                  <option [value]="true">Active</option>
-                  <option [value]="false">Inactive</option>
+                  <option value="true">Active</option>
+                  <option value="false">Inactive</option>
                 </select>
               </div>
               
@@ -283,17 +283,34 @@
           <!-- Pagination Info -->
           <div class="px-3 py-2 border-bottom bg-light">
             <div class="row align-items-center">
-              <div class="col-md-6">
-                <small class="text-muted">
-                  <span *ngIf="!isLoading">
-                    Showing {{ getStartIndex() }} to {{ getEndIndex() }} of {{ totalUsers }} users
-                  </span>
-                  <span *ngIf="isLoading" class="placeholder-glow">
-                    <span class="placeholder col-6"></span>
-                  </span>
-                </small>
+              <div class="col-md-8">
+                <div class="d-flex align-items-center gap-3">
+                  <small class="text-muted">
+                    <span *ngIf="!isLoading">
+                      Showing {{ getStartIndex() }} to {{ getEndIndex() }} of {{ totalUsers }} users
+                      <span *ngIf="hasActiveFilters()" class="text-primary">
+                        ({{ getActiveFilterCount() }} filter{{ getActiveFilterCount() > 1 ? 's' : '' }} applied)
+                      </span>
+                    </span>
+                    <span *ngIf="isLoading" class="placeholder-glow">
+                      <span class="placeholder col-6"></span>
+                    </span>
+                  </small>
+                  <!-- Active filters display -->
+                  <div *ngIf="hasActiveFilters() && !isLoading" class="d-flex gap-1">
+                    <span *ngIf="searchTerm" class="badge bg-info">
+                      Search: "{{ searchTerm }}"
+                    </span>
+                    <span *ngIf="selectedRole" class="badge bg-warning">
+                      Role: {{ selectedRole }}
+                    </span>
+                    <span *ngIf="selectedStatus !== ''" class="badge bg-success">
+                      Status: {{ selectedStatus === 'true' ? 'Active' : 'Inactive' }}
+                    </span>
+                  </div>
+                </div>
               </div>
-              <div class="col-md-6 text-end">
+              <div class="col-md-4 text-end">
                 <div class="d-flex align-items-center justify-content-end gap-2">
                   <label for="pageSizeSelect" class="form-label mb-0 small">Show:</label>
                   <select 

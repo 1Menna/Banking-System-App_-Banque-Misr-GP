@@ -50,7 +50,7 @@ export class AdminPanel implements OnInit, OnDestroy {
   // Search and filter properties
   searchTerm = '';
   selectedRole: 'Admin' | 'User' | '' = '';
-  selectedStatus: boolean | '' = '';
+  selectedStatus: string = ''; // Changed to string to handle select dropdown values
   
   // Form states
   isEditing = false;
@@ -126,9 +126,14 @@ export class AdminPanel implements OnInit, OnDestroy {
           // Apply search and filters
           const filters: any = {};
           if (this.selectedRole) filters.role = this.selectedRole;
-          if (this.selectedStatus !== '') filters.isActive = this.selectedStatus;
+          if (this.selectedStatus !== '') {
+            // Convert string value to boolean for filtering
+            filters.isActive = this.selectedStatus === 'true';
+          }
           
+          console.log('Applying filters:', { searchTerm: this.searchTerm, filters });
           const filteredUsers = this.userService.searchUsers(this.searchTerm, filters);
+          console.log('Filtered users count:', filteredUsers.length);
           
           // Apply pagination to filtered results
           const startIndex = (this.currentPage - 1) * this.pageSize;
@@ -192,18 +197,20 @@ export class AdminPanel implements OnInit, OnDestroy {
   // Search and filter methods
   onSearch(): void {
     this.currentPage = 1; // Reset to first page when searching
+    console.log('Search triggered:', { searchTerm: this.searchTerm, selectedRole: this.selectedRole, selectedStatus: this.selectedStatus });
     this.loadUsers();
   }
   
   onFilterChange(): void {
     this.currentPage = 1; // Reset to first page when filtering
+    console.log('Filter changed:', { searchTerm: this.searchTerm, selectedRole: this.selectedRole, selectedStatus: this.selectedStatus });
     this.loadUsers();
   }
   
   clearFilters(): void {
     this.searchTerm = '';
     this.selectedRole = '';
-    this.selectedStatus = '';
+    this.selectedStatus = ''; // Reset to empty string
     this.currentPage = 1;
     this.loadUsers();
   }
@@ -426,5 +433,19 @@ export class AdminPanel implements OnInit, OnDestroy {
   // Utility method to get ending index for current page
   getEndIndex(): number {
     return Math.min(this.currentPage * this.pageSize, this.totalUsers);
+  }
+  
+  // Check if any filters are active
+  hasActiveFilters(): boolean {
+    return !!(this.searchTerm || this.selectedRole || this.selectedStatus !== '');
+  }
+  
+  // Get active filter count for display
+  getActiveFilterCount(): number {
+    let count = 0;
+    if (this.searchTerm) count++;
+    if (this.selectedRole) count++;
+    if (this.selectedStatus !== '') count++;
+    return count;
   }
 }
