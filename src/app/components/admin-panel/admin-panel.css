@@ -17,15 +17,16 @@
 
 .modal-content {
     background: white;
-    max-width: 600px;
+    max-width: 650px;
     width: 90%;
     max-height: 90vh;
     overflow-y: auto;
     border-radius: 0.75rem !important;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     animation: slideInModal 0.3s ease-out;
     position: relative;
     margin: auto;
+    border: 1px solid rgba(0, 123, 255, 0.1);
 }
 
 .modal-header {
@@ -39,41 +40,32 @@
     top: 0;
     background: white;
     z-index: 1;
+    border-radius: 0.75rem 0.75rem 0 0;
 }
 
 .modal-header h5 {
     margin: 0;
     flex: 1;
+    font-weight: 600;
+    font-size: 1.25rem;
 }
 
-.btn-close {
-    background: none;
-    border: none;
-    font-size: 1.25rem;
-    cursor: pointer;
-    opacity: 0.5;
-    transition: opacity 0.2s ease;
-    padding: 0;
-    width: 24px;
-    height: 24px;
+/* Simple close button - just a box with red X */
+.btn-close-custom {
+    background: white;
+    border: 1px solid #ccc;
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 }
 
-.btn-close:hover {
-    opacity: 1;
-}
-
-.btn-close::before {
-    content: '\f00d';
-    font-family: 'Font Awesome 6 Free';
-    font-weight: 900;
-    color: #6c757d;
-}
-
-.btn-close:hover::before {
+.btn-close-custom i {
     color: #dc3545;
+    font-size: 16px;
 }
 
 /* Prevent background scrolling when modal is open */

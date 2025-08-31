@@ -139,7 +139,9 @@
               <i class="fa-solid fa-user-edit me-2" *ngIf="isEditing"></i>
               {{ isEditing ? 'Edit User' : 'Add New User' }}
             </h5>
-            <button type="button" class="btn-close" (click)="hideForm()" aria-label="Close"></button>
+            <button type="button" class="btn-close-custom" (click)="hideForm()" aria-label="Close">
+              <i class="fa-solid fa-times"></i>
+            </button>
           </div>
 
           <form [formGroup]="userForm" (ngSubmit)="submitForm()">
