@@ -586,3 +586,304 @@ body.modal-open {
 .table-responsive::-webkit-scrollbar-thumb:hover {
     background: #a1a1a1;
 }
+
+/* Pagination styling */
+.pagination {
+    margin-bottom: 0;
+}
+
+.page-link {
+    color: #007bff;
+    border-color: #dee2e6;
+    border-radius: 0.375rem;
+    margin: 0 2px;
+    transition: all 0.2s ease;
+}
+
+.page-link:hover {
+    color: #0056b3;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    transform: translateY(-1px);
+}
+
+.page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+}
+
+.page-item.disabled .page-link {
+    color: #6c757d;
+    background-color: #fff;
+    border-color: #dee2e6;
+    opacity: 0.6;
+}
+
+/* Loading spinner styling */
+.spinner-border {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* Loading overlay */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    border-radius: 0.75rem;
+    backdrop-filter: blur(2px);
+    animation: fadeInOverlay 0.2s ease-in;
+}
+
+.loading-overlay .text-center {
+    padding: 2rem;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 123, 255, 0.1);
+}
+
+.loading-overlay .spinner-border {
+    border-width: 4px;
+}
+
+/* Professional loading states */
+.placeholder-glow .placeholder {
+    animation: placeholder-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes placeholder-glow {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.5;
+    }
+}
+
+.placeholder {
+    display: inline-block;
+    min-height: 1em;
+    background-color: currentColor;
+    border-radius: 0.375rem;
+    opacity: 0.5;
+}
+
+/* Refresh button animation */
+.fa-refresh.fa-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Search and filter section styling */
+.search-filter-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #dee2e6;
+}
+
+.filter-controls .form-control,
+.filter-controls .form-select {
+    border-radius: 0.375rem;
+    border: 1px solid #ced4da;
+    transition: all 0.2s ease;
+}
+
+.filter-controls .form-control:focus,
+.filter-controls .form-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
+}
+
+/* Pagination info styling */
+.pagination-info {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+}
+
+/* Results count styling */
+.results-count {
+    color: #6c757d;
+    font-weight: 500;
+}
+
+/* No results styling */
+.no-results {
+    padding: 3rem 1rem;
+    text-align: center;
+    color: #6c757d;
+}
+
+.no-results i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+/* Enhanced card hover effects */
+.summary-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.summary-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Form submission loading state */
+.btn.loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.btn.loading .spinner-border {
+    margin-right: 0.5rem;
+}
+
+/* Smooth transitions for table updates */
+.table tbody tr {
+    transition: all 0.3s ease;
+}
+
+.table tbody tr.fade-out {
+    opacity: 0;
+    transform: translateX(-20px);
+}
+
+.table tbody tr.fade-in {
+    animation: fadeInRow 0.3s ease;
+}
+
+@keyframes fadeInRow {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Enhanced responsive design for pagination */
+@media (max-width: 576px) {
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .page-item {
+        margin: 0.125rem;
+    }
+    
+    .pagination-info {
+        text-align: center;
+        flex-direction: column;
+    }
+    
+    .filter-controls {
+        gap: 0.5rem;
+    }
+    
+    .filter-controls .col-md-3,
+    .filter-controls .col-md-4,
+    .filter-controls .col-md-2 {
+        margin-bottom: 0.75rem;
+    }
+}
+
+/* Status indicators */
+.status-indicator {
+    position: relative;
+    display: inline-block;
+}
+
+.status-indicator::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #28a745;
+    border: 2px solid white;
+    box-shadow: 0 0 0 1px #dee2e6;
+}
+
+.status-indicator.inactive::before {
+    background-color: #dc3545;
+}
+
+/* Enhanced table styling */
+.table thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.table thead th {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    border: none;
+    padding: 1rem 0.75rem;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading states for buttons */
+.btn[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Enhanced toast animations */
+.toast.slide-out {
+    animation: slideOutRight 0.3s ease-out forwards;
+}
+
+/* Performance optimizations */
+.table-container {
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
+/* Accessibility improvements */
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}

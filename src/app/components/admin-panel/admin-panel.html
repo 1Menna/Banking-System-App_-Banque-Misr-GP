@@ -38,17 +38,96 @@
   <!-- Main Content -->
   <div class="row mt-3 mx-2">
     <div class="col-12">
-      <!-- Add User Button -->
-      <div class="mb-3 d-flex justify-content-between align-items-center">
-        <h4 class="text-primary">
-          <i class="fa-solid fa-users me-2"></i>Users List
-        </h4>
-        <button 
-          *ngIf="!showAddForm" 
-          class="btn btn-primary" 
-          (click)="showAddUserForm()">
-          <i class="fa-solid fa-plus me-2"></i>Add New User
-        </button>
+      <!-- Add User Button and Search/Filter Controls -->
+      <div class="mb-3">
+        <!-- Header with Add Button -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="text-primary">
+            <i class="fa-solid fa-users me-2"></i>Users List
+          </h4>
+          <div class="d-flex gap-2">
+            <button 
+              class="btn btn-outline-secondary" 
+              (click)="refreshData()"
+              [disabled]="isLoading"
+              title="Refresh Data">
+              <i class="fa-solid fa-refresh me-2" [class.fa-spin]="isLoading"></i>Refresh
+            </button>
+            <button 
+              *ngIf="!showAddForm" 
+              class="btn btn-primary" 
+              (click)="showAddUserForm()"
+              [disabled]="isLoading">
+              <i class="fa-solid fa-plus me-2"></i>Add New User
+            </button>
+          </div>
+        </div>
+        
+        <!-- Search and Filter Controls -->
+        <div class="card mb-3">
+          <div class="card-body">
+            <div class="row g-3">
+              <!-- Search Input -->
+              <div class="col-md-4">
+                <label for="searchInput" class="form-label">Search Users</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="fa-solid fa-search"></i>
+                  </span>
+                  <input 
+                    type="text" 
+                    id="searchInput"
+                    class="form-control" 
+                    placeholder="Search by username, email, or phone"
+                    [(ngModel)]="searchTerm"
+                    (input)="onSearch()"
+                    [disabled]="isLoading" />
+                </div>
+              </div>
+              
+              <!-- Role Filter -->
+              <div class="col-md-3">
+                <label for="roleFilter" class="form-label">Filter by Role</label>
+                <select 
+                  id="roleFilter"
+                  class="form-select" 
+                  [(ngModel)]="selectedRole"
+                  (change)="onFilterChange()"
+                  [disabled]="isLoading">
+                  <option value="">All Roles</option>
+                  <option value="Admin">Admin</option>
+                  <option value="User">User</option>
+                </select>
+              </div>
+              
+              <!-- Status Filter -->
+              <div class="col-md-3">
+                <label for="statusFilter" class="form-label">Filter by Status</label>
+                <select 
+                  id="statusFilter"
+                  class="form-select" 
+                  [(ngModel)]="selectedStatus"
+                  (change)="onFilterChange()"
+                  [disabled]="isLoading">
+                  <option value="">All Status</option>
+                  <option [value]="true">Active</option>
+                  <option [value]="false">Inactive</option>
+                </select>
+              </div>
+              
+              <!-- Clear Filters Button -->
+              <div class="col-md-2 d-flex align-items-end">
+                <button 
+                  type="button" 
+                  class="btn btn-outline-secondary w-100" 
+                  (click)="clearFilters()"
+                  [disabled]="isLoading || (!searchTerm && !selectedRole && selectedStatus === '')">
+                  <i class="fa-solid fa-times me-2"></i>Clear
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Add/Edit User Modal Overlay -->
@@ -178,8 +257,9 @@
               <button 
                 type="submit" 
                 class="btn btn-primary" 
-                [disabled]="userForm.invalid">
-                <i class="fa-solid fa-save me-2"></i>{{ isEditing ? 'Update' : 'Add' }} User
+                [disabled]="userForm.invalid || isSubmitting">
+                <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                <i *ngIf="!isSubmitting" class="fa-solid fa-save me-2"></i>{{ isEditing ? 'Update' : 'Add' }} User
               </button>
             </div>
           </form>
@@ -187,8 +267,53 @@
       </div>
 
       <!-- Users Table -->
-      <div class="card shadow rounded-4">
-        <div class="card-body p-0">
+      <div class="card shadow rounded-4 position-relative">
+        <!-- Loading Overlay -->
+        <div *ngIf="isLoading" class="loading-overlay">
+          <div class="text-center">
+            <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="text-muted mb-0">Loading users...</p>
+            <small class="text-muted">Please wait while we fetch the latest data</small>
+          </div>
+        </div>
+        
+        <div class="card-body p-0" [style.opacity]="isLoading ? '0.5' : '1'">
+          <!-- Pagination Info -->
+          <div class="px-3 py-2 border-bottom bg-light">
+            <div class="row align-items-center">
+              <div class="col-md-6">
+                <small class="text-muted">
+                  <span *ngIf="!isLoading">
+                    Showing {{ getStartIndex() }} to {{ getEndIndex() }} of {{ totalUsers }} users
+                  </span>
+                  <span *ngIf="isLoading" class="placeholder-glow">
+                    <span class="placeholder col-6"></span>
+                  </span>
+                </small>
+              </div>
+              <div class="col-md-6 text-end">
+                <div class="d-flex align-items-center justify-content-end gap-2">
+                  <label for="pageSizeSelect" class="form-label mb-0 small">Show:</label>
+                  <select 
+                    id="pageSizeSelect"
+                    class="form-select form-select-sm" 
+                    style="width: auto;"
+                    [(ngModel)]="pageSize"
+                    (change)="changePageSize(pageSize)"
+                    [disabled]="isLoading">
+                    <option [value]="5">5</option>
+                    <option [value]="10">10</option>
+                    <option [value]="25">25</option>
+                    <option [value]="50">50</option>
+                  </select>
+                  <span class="small text-muted">per page</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
           <div class="table-responsive">
             <table class="table table-hover mb-0">
               <thead class="table-primary">
@@ -277,6 +402,46 @@
               </tbody>
             </table>
           </div>
+          
+          <!-- Pagination Controls -->
+          <div *ngIf="totalPages > 1" class="px-3 py-3 border-top">
+            <nav aria-label="Users pagination">
+              <ul class="pagination justify-content-center mb-0">
+                <!-- Previous Button -->
+                <li class="page-item" [class.disabled]="!hasPrevious">
+                  <button 
+                    class="page-link" 
+                    (click)="previousPage()"
+                    [disabled]="!hasPrevious">
+                    <i class="fa-solid fa-chevron-left"></i>
+                    Previous
+                  </button>
+                </li>
+                
+                <!-- Page Numbers -->
+                <li *ngFor="let page of getPageNumbers()" 
+                    class="page-item" 
+                    [class.active]="page === currentPage">
+                  <button 
+                    class="page-link" 
+                    (click)="goToPage(page)">
+                    {{ page }}
+                  </button>
+                </li>
+                
+                <!-- Next Button -->
+                <li class="page-item" [class.disabled]="!hasNext">
+                  <button 
+                    class="page-link" 
+                    (click)="nextPage()"
+                    [disabled]="!hasNext">
+                    Next
+                    <i class="fa-solid fa-chevron-right"></i>
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </div>
         </div>
       </div>
 
@@ -288,7 +453,7 @@
               <h5 class="card-title text-primary">
                 <i class="fa-solid fa-users"></i>
               </h5>
-              <h3 class="text-primary">{{ users.length }}</h3>
+              <h3 class="text-primary">{{ totalUsersCount }}</h3>
               <p class="card-text">Total Users</p>
             </div>
           </div>

@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Role, UserInterface } from '../interfaces/user-interface';
 
 @Injectable({
@@ -6,7 +7,8 @@ import { Role, UserInterface } from '../interfaces/user-interface';
 })
 export class UserService {
   
-  private users: UserInterface[] = [
+  private readonly STORAGE_KEY = 'banking_app_users';
+  private defaultUsers: UserInterface[] = [
     {
     //  
     id: "1",
@@ -280,15 +282,76 @@ export class UserService {
   }
   ];
 
- private nextId = (this.users.length 
-  ? (Math.max(...this.users.map(u => +u.id)) + 1) 
-  : 1).toString();
+  private users: UserInterface[] = [];
+  private nextId = '1';
+  private isDataLoaded = false;
+
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    this.initializeUsers();
+  }
+
+  // Initialize users immediately and synchronously when possible
+  private initializeUsers(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      const savedUsers = localStorage.getItem(this.STORAGE_KEY);
+      if (savedUsers) {
+        try {
+          this.users = JSON.parse(savedUsers);
+          this.nextId = this.users.length 
+            ? (Math.max(...this.users.map(u => +u.id)) + 1).toString()
+            : '1';
+          this.isDataLoaded = true;
+          return;
+        } catch (error) {
+          console.error('Error parsing users from localStorage:', error);
+          // Clear corrupted data
+          localStorage.removeItem(this.STORAGE_KEY);
+        }
+      }
+    }
+    
+    // If no saved data or not in browser, use default users
+    this.loadDefaultUsers();
+  }
+
+  // Load default users and save to storage
+  private loadDefaultUsers(): void {
+    this.users = [...this.defaultUsers];
+    this.nextId = (this.users.length 
+      ? (Math.max(...this.users.map(u => +u.id)) + 1) 
+      : 1).toString();
+    this.isDataLoaded = true;
+    
+    // Save default data to localStorage
+    this.saveToStorage();
+  }
+
+  // Save users to localStorage
+  private saveToStorage(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      try {
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.users));
+      } catch (error) {
+        console.error('Error saving users to localStorage:', error);
+      }
+    }
+  }
 
 
 
-  // Get all users
+  // Get all users (now returns immediately available data)
   getAllUsers(): UserInterface[] {
     return [...this.users];
+  }
+
+  // Check if data has been loaded
+  isUserDataLoaded(): boolean {
+    return this.isDataLoaded;
+  }
+
+  // Force reload from localStorage (for manual refresh scenarios)
+  reloadFromStorage(): void {
+    this.initializeUsers();
   }
 
   // Get user by ID
@@ -304,6 +367,7 @@ export class UserService {
     };
     this.users.push(newUser);
     this.nextId = (parseInt(this.nextId) + 1).toString();
+    this.saveToStorage();
     return newUser;
   }
 
@@ -312,6 +376,7 @@ export class UserService {
     const userIndex = this.users.findIndex(user => user.id === id);
     if (userIndex !== -1) {
       this.users[userIndex] = { ...this.users[userIndex], ...userData };
+      this.saveToStorage();
       return this.users[userIndex];
     }
     return null;
@@ -322,6 +387,7 @@ export class UserService {
     const userIndex = this.users.findIndex(user => user.id === id);
     if (userIndex !== -1) {
       this.users.splice(userIndex, 1);
+      this.saveToStorage();
       return true;
     }
     return false;
@@ -332,6 +398,7 @@ export class UserService {
     const user = this.users.find(user => user.id === id);
     if (user) {
       user.isActive = !user.isActive;
+      this.saveToStorage();
       return user;
     }
     return null;
@@ -351,5 +418,68 @@ export class UserService {
       user.email.toLowerCase() === email.toLowerCase() && 
       user.id !== excludeId
     );
+  }
+
+  // Pagination and lazy loading methods
+  getUsersPaginated(page: number = 1, pageSize: number = 10): {
+    users: UserInterface[];
+    totalCount: number;
+    totalPages: number;
+    currentPage: number;
+    hasNext: boolean;
+    hasPrevious: boolean;
+  } {
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    const paginatedUsers = this.users.slice(startIndex, endIndex);
+    const totalPages = Math.ceil(this.users.length / pageSize);
+
+    return {
+      users: paginatedUsers,
+      totalCount: this.users.length,
+      totalPages,
+      currentPage: page,
+      hasNext: page < totalPages,
+      hasPrevious: page > 1
+    };
+  }
+
+  // Search and filter users
+  searchUsers(searchTerm: string, filters?: {
+    role?: 'Admin' | 'User';
+    isActive?: boolean;
+  }): UserInterface[] {
+    let filteredUsers = this.users;
+
+    // Apply text search
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      filteredUsers = filteredUsers.filter(user => 
+        user.userName.toLowerCase().includes(term) ||
+        user.email.toLowerCase().includes(term) ||
+        user.phone.includes(term)
+      );
+    }
+
+    // Apply filters
+    if (filters) {
+      if (filters.role) {
+        filteredUsers = filteredUsers.filter(user => user.role === filters.role);
+      }
+      if (filters.isActive !== undefined) {
+        filteredUsers = filteredUsers.filter(user => user.isActive === filters.isActive);
+      }
+    }
+
+    return filteredUsers;
+  }
+
+  // Clear all data and reset to defaults
+  resetToDefaults(): void {
+    this.users = [...this.defaultUsers];
+    this.nextId = (this.users.length 
+      ? (Math.max(...this.users.map(u => +u.id)) + 1) 
+      : 1).toString();
+    this.saveToStorage();
   }
 }
