@@ -17,7 +17,7 @@
   <div class="mb-3">
     <label class="form-label">From Account</label>
     <select class="form-select" formControlName="fromAccount" (change)="onFromAccountChange()">
-      <option [ngValue]="null">Select source account</option>
+      <!-- <option [ngValue]="null">Select source account</option> -->
       <option *ngFor="let acc of userAccounts" [ngValue]="acc">
         {{ acc.accountType }} ({{ acc.accountNo }}) - {{ acc.balance | currency }}
       </option>

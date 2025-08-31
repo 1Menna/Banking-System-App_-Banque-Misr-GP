@@ -7,7 +7,7 @@ export interface AccountInterface {
   accountNo: string;
   accountType: AccountType;
   balance: number;
-  userId: number;
+  userId: number | string;
 }
 export enum AccountType {
   Savings = 'Savings',
