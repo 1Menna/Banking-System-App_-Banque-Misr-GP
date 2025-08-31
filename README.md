@@ -1,59 +1,28 @@
-# BankingSystemApp
+# 💳 Banking System App  
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.5.
+## 📌 Project Idea  
+A simple **Angular application** that simulates a **banking system**.  
+The app demonstrates key Angular concepts such as **routing, dependency injection, guards, lazy loading, pipes, enums, and HTTP services**.  
 
-## Development server
+### 👤 Roles  
+- **User** → Manage accounts, view transactions, perform fund transfers.  
+- **Admin** → Manage users (CRUD operations, activate/deactivate accounts).  
 
-To start a local development server, run:
+### 🔑 Key Features  
+- Role-based **login and dashboards** (Admin/User).  
+- **User Dashboard**: View account details, transfer funds, list transactions.  
+- **Transactions Page**: Filter & search transactions (Credit/Debit).  
+- **Admin Dashboard**: Manage users (Add/Edit/Delete, Activate/Deactivate).  
+- **Navbar**: Role-based navigation + logout.  
 
-```bash
-ng serve
-```
+### 🛠️ Concepts Covered  
+- **Dependency Injection** (AuthService, AccountService, UserService).  
+- **Routing & Guards** (role-based access).  
+- **Lazy Loading** (User & Admin modules).  
+- **Enums** (AccountType, TransactionType).  
+- **Custom Pipes** for filtering transactions.  
+- **Mock API Integration** for accounts & transactions.  
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+✨ This project is a **learning-focused banking system simulation** that combines multiple Angular features into a single application.  
