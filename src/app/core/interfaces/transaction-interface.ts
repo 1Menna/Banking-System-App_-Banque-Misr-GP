@@ -3,7 +3,7 @@ export enum TransactionType {
   Debit = 'Debit',
 }
 export interface Transaction {
-  id: string | number;
+  id: string ;
   fromAccountNo: string;
   ToAccountNo: string;  // API expects capital 'T' based on existing data
   date: string | Date;
