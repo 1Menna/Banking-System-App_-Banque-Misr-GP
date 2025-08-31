@@ -36,8 +36,8 @@ export class Transfer implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.transferForm = this.fb.group({
-      fromAccount: [null, Validators.required],   // full AccountInterface object
-      toAccount: [null, Validators.required],     // full AccountInterface object
+      fromAccount: [null, Validators.required],
+      toAccount: [null, Validators.required],
       amount: [null, [Validators.required, Validators.min(1)]],
       description: ['']
     });
@@ -45,7 +45,6 @@ export class Transfer implements OnInit, OnDestroy {
     this.loadAccounts();
     this.loadTransactions();
 
-    // Reactively adjust amount validator when fromAccount changes
     const fromCtrl = this.transferForm.get('fromAccount');
     if (fromCtrl) {
       this.subs.add(
@@ -69,7 +68,6 @@ export class Transfer implements OnInit, OnDestroy {
     this.subs.unsubscribe();
   }
 
-  // ---------------- Accounts ----------------
   loadAccounts() {
     this.accountService.getAllAccounts().subscribe({
       next: (accounts) => {
@@ -94,12 +92,11 @@ export class Transfer implements OnInit, OnDestroy {
     });
   }
 
-  // ---------------- Transactions ----------------
   loadTransactions() {
     this.isLoading = true;
     this.accountService.getTransactions().subscribe({
       next: (txs) => {
-        this.transactions = (txs || []).slice().reverse(); // latest first
+        this.transactions = (txs || []).slice().reverse();
         this.updateVisibleTransactions();
         this.isLoading = false;
       },
@@ -120,7 +117,6 @@ export class Transfer implements OnInit, OnDestroy {
     this.visibleTransactions = this.transactions.slice(0, this.visibleCount);
   }
 
-  // ---------------- Transfer ----------------
   onSubmit() {
     if (this.transferForm.invalid) {
       this.transferForm.markAllAsTouched();
@@ -153,13 +149,11 @@ export class Transfer implements OnInit, OnDestroy {
       return;
     }
 
-    // Additional validation
     if (!sender.accountNo || !receiver.accountNo) {
       this.error = '❌ Invalid account numbers.';
       return;
     }
 
-    // Debug logging
     console.log('Selected accounts:', {
       sender: {
         id: sender.id,
@@ -177,7 +171,6 @@ export class Transfer implements OnInit, OnDestroy {
       description
     });
 
-    // Show loading state
     this.isLoading = true;
     this.error = '';
     this.message = '';
@@ -189,7 +182,6 @@ export class Transfer implements OnInit, OnDestroy {
         const debitTx: Transaction | null = res.debitTx ?? null;
         const creditTx: Transaction | null = res.creditTx ?? null;
 
-        // update local accounts arrays
         this.accounts = this.accounts.map(acc => {
           if (acc.id === updatedSender.id) return updatedSender;
           if (acc.id === updatedReceiver.id) return updatedReceiver;
@@ -200,7 +192,6 @@ export class Transfer implements OnInit, OnDestroy {
           acc.id === updatedSender.id ? updatedSender : acc
         );
 
-        // add transactions if not already in list
         if (debitTx && !this.transactions.find(tx => tx.id === debitTx.id)) {
           this.transactions.unshift(debitTx);
         }
@@ -219,7 +210,6 @@ export class Transfer implements OnInit, OnDestroy {
         console.error('Transfer error:', err);
         this.isLoading = false;
         
-        // Better error handling with more details
         if (err.status === 400) {
           console.error('400 Error details:', err.error);
           if (err.error === 'Max number of elements reached for this resource!') {

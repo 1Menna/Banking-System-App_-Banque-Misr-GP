@@ -1,5 +1,4 @@
 <div class="container-fluid">
-  <!-- Header Section -->
   <div class="row" style="min-height: 20vh;">
     <div class="col text-white p-3 d-flex flex-column justify-content-center align-items-center">
       <a class="navbar-brand text-primary me-2 brand-icon">
@@ -10,7 +9,6 @@
     </div>
   </div>
 
-  <!-- Toast Container -->
   <div class="toast-container">
     <div *ngIf="successMessage" class="toast toast-success show">
       <div class="toast-header">
@@ -35,12 +33,9 @@
     </div>
   </div>
 
-  <!-- Main Content -->
   <div class="row mt-3 mx-2">
     <div class="col-12">
-      <!-- Add User Button and Search/Filter Controls -->
       <div class="mb-3">
-        <!-- Header with Add Button -->
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h4 class="text-primary">
             <i class="fa-solid fa-users me-2"></i>Users List
@@ -63,11 +58,9 @@
           </div>
         </div>
         
-        <!-- Search and Filter Controls -->
         <div class="card mb-3">
           <div class="card-body">
             <div class="row g-3">
-              <!-- Search Input -->
               <div class="col-md-4">
                 <label for="searchInput" class="form-label">Search Users</label>
                 <div class="input-group">
@@ -85,7 +78,6 @@
                 </div>
               </div>
               
-              <!-- Role Filter -->
               <div class="col-md-3">
                 <label for="roleFilter" class="form-label">Filter by Role</label>
                 <select 
@@ -100,7 +92,6 @@
                 </select>
               </div>
               
-              <!-- Status Filter -->
               <div class="col-md-3">
                 <label for="statusFilter" class="form-label">Filter by Status</label>
                 <select 
@@ -115,7 +106,6 @@
                 </select>
               </div>
               
-              <!-- Clear Filters Button -->
               <div class="col-md-2 d-flex align-items-end">
                 <button 
                   type="button" 
@@ -130,7 +120,6 @@
         </div>
       </div>
 
-      <!-- Add/Edit User Modal Overlay -->
       <div *ngIf="showAddForm" class="modal-overlay" (click)="onOverlayClick($event)">
         <div class="modal-content card shadow rounded-4 p-4" (click)="$event.stopPropagation()">
           <div class="modal-header mb-4">
@@ -146,7 +135,6 @@
 
           <form [formGroup]="userForm" (ngSubmit)="submitForm()">
             <div class="row">
-              <!-- Username -->
               <div class="col-md-6 mb-3">
                 <label for="userName" class="form-label">Username *</label>
                 <div class="input-group">
@@ -166,7 +154,6 @@
                 </small>
               </div>
 
-              <!-- Email -->
               <div class="col-md-6 mb-3">
                 <label for="email" class="form-label">Email *</label>
                 <div class="input-group">
@@ -188,7 +175,6 @@
             </div>
 
             <div class="row">
-              <!-- Password -->
               <div class="col-md-6 mb-3">
                 <label for="password" class="form-label">Password *</label>
                 <div class="input-group">
@@ -208,7 +194,6 @@
                 </small>
               </div>
 
-              <!-- Phone -->
               <div class="col-md-6 mb-3">
                 <label for="phone" class="form-label">Phone *</label>
                 <div class="input-group">
@@ -230,7 +215,6 @@
             </div>
 
             <div class="row">
-              <!-- Role -->
               <div class="col-md-6 mb-3">
                 <label for="role" class="form-label">Role *</label>
                 <div class="input-group">
@@ -248,7 +232,6 @@
               </div>
             </div>
 
-            <!-- Form Buttons -->
             <div class="d-flex justify-content-end gap-2 mt-3">
               <button 
                 type="button" 
@@ -268,9 +251,7 @@
         </div>
       </div>
 
-      <!-- Users Table -->
       <div class="card shadow rounded-4 position-relative">
-        <!-- Loading Overlay -->
         <div *ngIf="isLoading" class="loading-overlay">
           <div class="text-center">
             <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
@@ -282,7 +263,6 @@
         </div>
         
         <div class="card-body p-0" [style.opacity]="isLoading ? '0.5' : '1'">
-          <!-- Pagination Info -->
           <div class="px-3 py-2 border-bottom bg-light">
             <div class="row align-items-center">
               <div class="col-md-8">
@@ -298,7 +278,6 @@
                       <span class="placeholder col-6"></span>
                     </span>
                   </small>
-                  <!-- Active filters display -->
                   <div *ngIf="hasActiveFilters() && !isLoading" class="d-flex gap-1">
                     <span *ngIf="searchTerm" class="badge bg-info">
                       Search: "{{ searchTerm }}"
@@ -422,11 +401,9 @@
             </table>
           </div>
           
-          <!-- Pagination Controls -->
           <div *ngIf="totalPages > 1" class="px-3 py-3 border-top">
             <nav aria-label="Users pagination">
               <ul class="pagination justify-content-center mb-0">
-                <!-- Previous Button -->
                 <li class="page-item" [class.disabled]="!hasPrevious">
                   <button 
                     class="page-link" 
@@ -437,7 +414,6 @@
                   </button>
                 </li>
                 
-                <!-- Page Numbers -->
                 <li *ngFor="let page of getPageNumbers()" 
                     class="page-item" 
                     [class.active]="page === currentPage">
@@ -448,7 +424,6 @@
                   </button>
                 </li>
                 
-                <!-- Next Button -->
                 <li class="page-item" [class.disabled]="!hasNext">
                   <button 
                     class="page-link" 
@@ -464,7 +439,6 @@
         </div>
       </div>
 
-      <!-- Users Count Summary -->
       <div class="row mt-3">
         <div class="col-md-4">
           <div class="card text-center border-primary">

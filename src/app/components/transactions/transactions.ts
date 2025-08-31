@@ -1,4 +1,3 @@
-// transactions.ts
 import { Component } from '@angular/core';
 import { CommonModule, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -24,7 +23,6 @@ export class Transactions {
   selectedTransaction: Transaction | null = null;
   visibleCount = 10;
 
-  // new state handling
   isLoading = false;
   errorMessage = '';
 
@@ -43,15 +41,12 @@ export class Transactions {
       next: (accounts) => {
         this.userAccounts = accounts || [];
         
-        // Get current user
         const currentUser = this.authService.getCurrentUser();
         if (currentUser) {
-          // Filter accounts for current user
           this.userAccounts = this.userAccounts.filter(
             acc => acc.userId?.toString() === currentUser.id?.toString()
           );
           
-          // Now load transactions for user's accounts
           this.fetchUserTransactions();
         } else {
           this.errorMessage = 'User not logged in';
@@ -72,24 +67,19 @@ export class Transactions {
       next: data => {
         this.transactions = data || [];
         
-        // Filter transactions to only show those relevant to user's accounts
         this.userTransactions = this.transactions.filter(tx => {
           const fromAccount = this.userAccounts.find(acc => acc.accountNo === tx.fromAccountNo);
           const toAccount = this.userAccounts.find(acc => acc.accountNo === tx.ToAccountNo);
           
-          // For transfers, show the transaction relevant to the user's perspective
           if (tx.description.includes('Transfer to') || tx.description.includes('Transfer from')) {
             if (fromAccount && tx.type === 'Debit') {
-              // User is sender - show debit transaction (money leaving their account)
               return true;
             } else if (toAccount && tx.type === 'Credit') {
-              // User is receiver - show credit transaction (money arriving to their account)
               return true;
             }
-            return false; // Don't show the other side of the transfer
+            return false;
           }
           
-          // For non-transfer transactions, show if user is sender or receiver
           return fromAccount || toAccount;
         });
         

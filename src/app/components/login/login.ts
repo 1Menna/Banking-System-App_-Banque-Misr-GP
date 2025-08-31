@@ -17,7 +17,6 @@ export class Login {
   
   errorMessage = '';
 
-  // inject service
   constructor(private _authService: Auth, private _Router:Router) { }
 
   loginForm = new FormGroup({
@@ -30,7 +29,7 @@ export class Login {
     if (this.loginForm.valid)
     {
       const { userName, password } = this.loginForm.value;
-      const user:UserInterface | undefined = this._authService.login(userName ??'', password ??''); // because value could be string or null or undefined
+      const user:UserInterface | undefined = this._authService.login(userName ??'', password ??'');
 
       if (user)
       {

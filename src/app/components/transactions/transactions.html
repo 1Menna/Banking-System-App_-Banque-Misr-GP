@@ -9,17 +9,14 @@
 <div class="container">
   <div class="card-design">
 
-    <!-- Loader -->
     <div *ngIf="isLoading" class="text-center p-3">
       <i class="fa fa-spinner fa-spin"></i> Loading transactions...
     </div>
 
-    <!-- Error -->
     <div *ngIf="errorMessage" class="alert alert-danger">
       {{ errorMessage }}
     </div>
 
-    <!-- Filters (only show if no error & not loading) -->
     <div *ngIf="!isLoading && !errorMessage">
       <div class="d-flex">
         <a class="navbar-brand text-dark">
@@ -58,7 +55,7 @@
 } @else {
   <div class="stack">
     @for (t of (visibleTransactions | transactionFilter:query:typeFilter); track t.id) {
-     <!-- <app-transactions [transactions]="t"></app-transactions> -->
+     
     }
   </div>
 }
@@ -103,7 +100,7 @@
               <p class="text-muted mb-0">Transaction ID: {{ t.id }}</p>
                <button (click)="onDelete((t.id))" class="btn btn-danger btn-sm">Delete</button>
             </div>
-             <!-- <button (click)="onDelete((t.id))" class="btn btn-danger btn-sm">Delete</button> -->
+
           </div>
         </div>
       }

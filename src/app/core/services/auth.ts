@@ -24,7 +24,6 @@ export class Auth {
     );
 
     if (foundUser) {
-      // Save to localStorage
       localStorage.setItem(this.storageKey, JSON.stringify(foundUser));
     }
 

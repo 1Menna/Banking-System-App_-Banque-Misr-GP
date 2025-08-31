@@ -35,7 +35,6 @@ export class AdminPanel implements OnInit, OnDestroy {
   users: UserInterface[] = [];
   displayedColumns: string[] = ['username', 'email', 'phone', 'role', 'status', 'actions'];
   
-  // Pagination properties
   currentPage = 1;
   pageSize = 10;
   totalUsers = 0;
@@ -43,25 +42,21 @@ export class AdminPanel implements OnInit, OnDestroy {
   hasNext = false;
   hasPrevious = false;
   
-  // Loading states
-  isLoading = true; // Start with loading state
+  isLoading = true;
   isSubmitting = false;
   
-  // Search and filter properties
   searchTerm = '';
   selectedRole: 'Admin' | 'User' | '' = '';
-  selectedStatus: string = ''; // Changed to string to handle select dropdown values
+  selectedStatus: string = '';
   
-  // Form states
   isEditing = false;
   editingUserId: string | null = null;
   showAddForm = false;
   
-  // Messages
   successMessage = '';
   errorMessage = '';
   
-  // User form
+  userForm
   userForm = new FormGroup({
     userName: new FormControl('', [Validators.required, Validators.minLength(3)]),
     password: new FormControl('', [Validators.required, Validators.minLength(6)]),
@@ -73,7 +68,6 @@ export class AdminPanel implements OnInit, OnDestroy {
   constructor(private userService: UserService,
       @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    // Start with loading state until data is ready
     this.isLoading = true;
   }
   
@@ -81,30 +75,23 @@ export class AdminPanel implements OnInit, OnDestroy {
     this.initializeData();
   }
 
-  // Initialize data with proper loading state management
   private initializeData(): void {
     this.isLoading = true;
     
-    // Check if user service has data loaded
     if (this.userService.isUserDataLoaded()) {
-      // Data is already available, load immediately
       this.loadUsers();
     } else {
-      // Wait a moment for service to initialize, then load
       setTimeout(() => {
         this.loadUsers();
       }, 100);
     }
   }
   
-  // Handle clicking outside modal to close
   onOverlayClick(event: MouseEvent): void {
     if (event.target === event.currentTarget) {
       this.hideForm();
     }
   }
-  
-  // Handle ESC key to close modal
   @HostListener('document:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent): void {
     if (event.key === 'Escape' && this.showAddForm) {
@@ -119,15 +106,12 @@ export class AdminPanel implements OnInit, OnDestroy {
   loadUsers(): void {
     this.isLoading = true;
     
-    // Small delay to ensure smooth loading experience
     setTimeout(() => {
       try {
         if (this.searchTerm || this.selectedRole || this.selectedStatus !== '') {
-          // Apply search and filters
           const filters: any = {};
           if (this.selectedRole) filters.role = this.selectedRole;
           if (this.selectedStatus !== '') {
-            // Convert string value to boolean for filtering
             filters.isActive = this.selectedStatus === 'true';
           }
           
@@ -135,7 +119,6 @@ export class AdminPanel implements OnInit, OnDestroy {
           const filteredUsers = this.userService.searchUsers(this.searchTerm, filters);
           console.log('Filtered users count:', filteredUsers.length);
           
-          // Apply pagination to filtered results
           const startIndex = (this.currentPage - 1) * this.pageSize;
           const endIndex = startIndex + this.pageSize;
           this.users = filteredUsers.slice(startIndex, endIndex);
@@ -144,7 +127,6 @@ export class AdminPanel implements OnInit, OnDestroy {
           this.hasNext = this.currentPage < this.totalPages;
           this.hasPrevious = this.currentPage > 1;
         } else {
-          // Use built-in pagination
           const paginationResult = this.userService.getUsersPaginated(this.currentPage, this.pageSize);
           this.users = paginationResult.users;
           this.totalUsers = paginationResult.totalCount;
@@ -159,10 +141,9 @@ export class AdminPanel implements OnInit, OnDestroy {
         this.showError('Failed to load users. Please try again.');
         this.isLoading = false;
       }
-    }, 200); // Slightly longer delay for better UX
+    }, 200);
   }
   
-  // Refresh data manually
   refreshData(): void {
     this.userService.reloadFromStorage();
     this.currentPage = 1;
@@ -190,19 +171,18 @@ export class AdminPanel implements OnInit, OnDestroy {
   
   changePageSize(newPageSize: number): void {
     this.pageSize = newPageSize;
-    this.currentPage = 1; // Reset to first page
+    this.currentPage = 1;
     this.loadUsers();
   }
   
-  // Search and filter methods
   onSearch(): void {
-    this.currentPage = 1; // Reset to first page when searching
+    this.currentPage = 1;
     console.log('Search triggered:', { searchTerm: this.searchTerm, selectedRole: this.selectedRole, selectedStatus: this.selectedStatus });
     this.loadUsers();
   }
   
   onFilterChange(): void {
-    this.currentPage = 1; // Reset to first page when filtering
+    this.currentPage = 1;
     console.log('Filter changed:', { searchTerm: this.searchTerm, selectedRole: this.selectedRole, selectedStatus: this.selectedStatus });
     this.loadUsers();
   }
@@ -210,12 +190,11 @@ export class AdminPanel implements OnInit, OnDestroy {
   clearFilters(): void {
     this.searchTerm = '';
     this.selectedRole = '';
-    this.selectedStatus = ''; // Reset to empty string
+    this.selectedStatus = '';
     this.currentPage = 1;
     this.loadUsers();
   }
   
-  // Show add user form
   showAddUserForm(): void {
     this.showAddForm = true;
     this.isEditing = false;
@@ -226,7 +205,6 @@ export class AdminPanel implements OnInit, OnDestroy {
     this.lockBodyScroll();
   }
   
-  // Hide form
   hideForm(): void {
     this.showAddForm = false;
     this.isEditing = false;
@@ -236,7 +214,6 @@ export class AdminPanel implements OnInit, OnDestroy {
     this.unlockBodyScroll();
   }
   
-  // Edit user
   editUser(user: UserInterface): void {
     this.isEditing = true;
     this.editingUserId = user.id;
@@ -252,16 +229,13 @@ export class AdminPanel implements OnInit, OnDestroy {
     this.lockBodyScroll();
   }
   
-  // Submit form (add or edit)
   submitForm(): void {
     if (this.userForm.valid && !this.isSubmitting) {
       this.isSubmitting = true;
       const formData = this.userForm.value;
       
-      // Simulate async operation
       setTimeout(() => {
         if (this.isEditing && this.editingUserId) {
-          // Check for duplicate username/email (excluding current user)
           if (this.userService.isUsernameExists(formData.userName!, this.editingUserId)) {
             this.showError('Username already exists');
             this.isSubmitting = false;
@@ -273,7 +247,6 @@ export class AdminPanel implements OnInit, OnDestroy {
             return;
           }
           
-          // Update user
           const updatedUser = this.userService.updateUser(this.editingUserId, {
             userName: formData.userName!,
             password: formData.password!,
@@ -288,7 +261,6 @@ export class AdminPanel implements OnInit, OnDestroy {
             this.hideForm();
           }
         } else {
-          // Check for duplicate username/email
           if (this.userService.isUsernameExists(formData.userName!)) {
             this.showError('Username already exists');
             this.isSubmitting = false;
@@ -300,7 +272,6 @@ export class AdminPanel implements OnInit, OnDestroy {
             return;
           }
           
-          // Add new user
           const newUser = this.userService.addUser({
             userName: formData.userName!,
             password: formData.password!,
@@ -316,13 +287,12 @@ export class AdminPanel implements OnInit, OnDestroy {
         }
         
         this.isSubmitting = false;
-      }, 500); // Simulate network delay
+      }, 500);
     } else {
       this.showError('Please fill in all required fields correctly');
     }
   }
   
-  // Delete user
   deleteUser(user: UserInterface): void {
     const success = this.userService.deleteUser(user.id);
     if (success) {
@@ -333,7 +303,6 @@ export class AdminPanel implements OnInit, OnDestroy {
     }
   }
   
-  // Toggle user status
   toggleUserStatus(user: UserInterface): void {
     const previousState = user.isActive;
     const updatedUser = this.userService.toggleUserStatus(user.id);
@@ -343,22 +312,20 @@ export class AdminPanel implements OnInit, OnDestroy {
       this.loadUsers();
     } else {
       this.showError('Failed to update user status');
-      // Revert the visual change if the update failed
       user.isActive = previousState;
     }
   }
   
-  // Utility methods
   private showSuccess(message: string): void {
     this.successMessage = message;
     this.errorMessage = '';
-    setTimeout(() => this.clearMessages(), 5000); // Auto-dismiss after 5 seconds
+    setTimeout(() => this.clearMessages(), 5000);
   }
   
   private showError(message: string): void {
     this.errorMessage = message;
     this.successMessage = '';
-    setTimeout(() => this.clearMessages(), 5000); // Auto-dismiss after 5 seconds
+    setTimeout(() => this.clearMessages(), 5000);
   }
   
   clearMessages(): void {
@@ -366,7 +333,6 @@ export class AdminPanel implements OnInit, OnDestroy {
     this.errorMessage = '';
   }
   
-  // Computed properties for template
   get activeUsersCount(): number {
     return this.userService.getAllUsers().filter(u => u.isActive).length;
   }
@@ -379,14 +345,12 @@ export class AdminPanel implements OnInit, OnDestroy {
     return this.userService.getAllUsers().length;
   }
   
-  // Get page numbers for pagination display
   getPageNumbers(): number[] {
     const pages: number[] = [];
     const maxVisible = 5;
     let start = Math.max(1, this.currentPage - Math.floor(maxVisible / 2));
     let end = Math.min(this.totalPages, start + maxVisible - 1);
     
-    // Adjust start if we're near the end
     if (end - start + 1 < maxVisible) {
       start = Math.max(1, end - maxVisible + 1);
     }
@@ -397,8 +361,6 @@ export class AdminPanel implements OnInit, OnDestroy {
     
     return pages;
   }
-  
-  // Modal body scroll management
   
   private lockBodyScroll(): void {
      if (isPlatformBrowser(this.platformId)) {
@@ -411,7 +373,6 @@ export class AdminPanel implements OnInit, OnDestroy {
     }
   }
   
-  // Form validation helpers
   getFieldError(fieldName: string): string {
     const field = this.userForm.get(fieldName);
     if (field?.touched && field?.errors) {
@@ -425,22 +386,18 @@ export class AdminPanel implements OnInit, OnDestroy {
     return '';
   }
   
-  // Utility method to get starting index for current page
   getStartIndex(): number {
     return (this.currentPage - 1) * this.pageSize + 1;
   }
   
-  // Utility method to get ending index for current page
   getEndIndex(): number {
     return Math.min(this.currentPage * this.pageSize, this.totalUsers);
   }
   
-  // Check if any filters are active
   hasActiveFilters(): boolean {
     return !!(this.searchTerm || this.selectedRole || this.selectedStatus !== '');
   }
   
-  // Get active filter count for display
   getActiveFilterCount(): number {
     let count = 0;
     if (this.searchTerm) count++;
