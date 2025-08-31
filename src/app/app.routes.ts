@@ -24,10 +24,10 @@ export const routes: Routes = [
         path: 'user', component: UserLayout, canActivate: [authGuard], data: { role: 'User' } ,children: [
         {path:'',redirectTo:'user-home',pathMatch:'full'},
         {path:'user-home',component:UserHome,title:"User Home"},
-        {path:'my-account',component:MyAccount,title:"My Account"},
-        {path:'transactions', loadComponent: ()=> 
-        import('./components/transactions/transactions').then(m=>m.Transactions),
-        title:"Transactions"},
+        {path:'my-account', loadComponent: () =>
+        import('./components/my-account/my-account').then(m => m.MyAccount),title:"My Account"},
+        {path:'transactions', loadComponent: () =>
+        import('./components/transactions/transactions').then(m => m.Transactions),title:"Transactions"},
         {path:'transfer',component:Transfer,title:"Transfer"}
     ]
 },

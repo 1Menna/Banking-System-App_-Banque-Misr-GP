@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CurrencyPipe, NgFor, NgClass, DatePipe } from '@angular/common';
+import { CurrencyPipe, NgFor, NgClass, DatePipe, NgIf } from "@angular/common";
 import { AccountInterface } from '../../core/interfaces/account-interface';
 import { Transaction } from '../../core/interfaces/transaction-interface';
 import { AccountService } from '../../core/services/account';
@@ -8,16 +8,19 @@ import { Auth } from '../../core/services/auth';
 @Component({
   selector: 'app-my-account',
   standalone: true,
-  imports: [CurrencyPipe, NgFor, NgClass, ],
-  // DatePipe
+  imports: [CurrencyPipe, NgFor, NgClass,DatePipe ,NgIf],
+  
   templateUrl: './my-account.html',
   styleUrls: ['./my-account.css']
 })
 export class MyAccount  implements OnInit{
   account: AccountInterface | null = null;
   transactions: Transaction[] = [];
+  displayedTransactions: Transaction[] = [];
   loading: boolean = true;
   error: string | null = null;
+  itemsPerPage: number = 5; 
+  currentPage: number = 1;
   constructor(private _AccountService:AccountService,
     private _Auth:Auth
   ) {}
@@ -40,6 +43,7 @@ export class MyAccount  implements OnInit{
           this._AccountService.getTransactionsByAccount(this.account.accountNo).subscribe({
             next: (txs) => {
               this.transactions = txs;
+               this.displayedTransactions = this.transactions.slice(0, this.itemsPerPage);
               this.loading = false;
             },
             error: () => {
@@ -57,5 +61,10 @@ export class MyAccount  implements OnInit{
         this.loading = false;
       }
     });
+  }
+    loadMore() {
+    this.currentPage++;
+    const nextItems = this.transactions.slice(0, this.itemsPerPage * this.currentPage);
+    this.displayedTransactions = nextItems;
   }
 }

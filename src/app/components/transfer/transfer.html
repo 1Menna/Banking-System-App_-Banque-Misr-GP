@@ -53,8 +53,9 @@
           </div>
 
           <!-- Submit -->
-          <button class="btn btn-primary w-100" type="submit" [disabled]="transferForm.invalid">
-            Transfer Funds
+          <button class="btn btn-primary w-100" type="submit" [disabled]="transferForm.invalid || isLoading">
+            <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+            {{ isLoading ? 'Processing...' : 'Transfer Funds' }}
           </button>
         </form>
 
