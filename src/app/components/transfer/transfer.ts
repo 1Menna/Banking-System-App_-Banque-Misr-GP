@@ -45,6 +45,7 @@ export class Transfer implements OnInit, OnDestroy {
     this.loadAccounts();
     this.loadTransactions();
 
+    // Reactively adjust amount validator when fromAccount changes
     const fromCtrl = this.transferForm.get('fromAccount');
     if (fromCtrl) {
       this.subs.add(
@@ -85,9 +86,6 @@ export class Transfer implements OnInit, OnDestroy {
         this.userAccounts = this.accounts.filter(
           acc => acc.userId?.toString() === userId?.toString()
         );
-
-        console.log('all accounts:', this.accounts);
-        console.log('userAccounts:', this.userAccounts);
       },
       error: (err) => {
         this.errorMessage = 'Failed to load accounts';
@@ -155,9 +153,37 @@ export class Transfer implements OnInit, OnDestroy {
       return;
     }
 
+    // Additional validation
+    if (!sender.accountNo || !receiver.accountNo) {
+      this.error = '❌ Invalid account numbers.';
+      return;
+    }
+
+    // Debug logging
+    console.log('Selected accounts:', {
+      sender: {
+        id: sender.id,
+        accountNo: sender.accountNo,
+        accountType: sender.accountType,
+        balance: sender.balance
+      },
+      receiver: {
+        id: receiver.id,
+        accountNo: receiver.accountNo,
+        accountType: receiver.accountType,
+        balance: receiver.balance
+      },
+      amount: amt,
+      description
+    });
+
+    // Show loading state
+    this.isLoading = true;
+    this.error = '';
+    this.message = '';
+
     this.accountService.fundTransfer(sender, receiver, amt, description).subscribe({
       next: (res) => {
-        // Expect backend to return { sender, receiver, debitTx, creditTx }
         const updatedSender: AccountInterface = res.sender ?? { ...sender, balance: sender.balance - amt };
         const updatedReceiver: AccountInterface = res.receiver ?? { ...receiver, balance: receiver.balance + amt };
         const debitTx: Transaction | null = res.debitTx ?? null;
@@ -187,10 +213,29 @@ export class Transfer implements OnInit, OnDestroy {
         this.error = '';
         this.transferForm.reset();
         this.selectedFromAccount = null;
+        this.isLoading = false;
       },
       error: (err) => {
-        console.error(err);
-        this.error = err?.error?.message ?? err?.message ?? '❌ Transfer failed.';
+        console.error('Transfer error:', err);
+        this.isLoading = false;
+        
+        // Better error handling with more details
+        if (err.status === 400) {
+          console.error('400 Error details:', err.error);
+          if (err.error === 'Max number of elements reached for this resource!') {
+            this.error = '❌ API limit reached. Please contact support or try again later.';
+          } else {
+            this.error = '❌ Invalid request data. Please check your transfer details.';
+          }
+        } else if (err.status === 404) {
+          this.error = '❌ Account not found. Please refresh and try again.';
+        } else if (err.status === 500) {
+          this.error = '❌ Server error. Please try again later.';
+        } else if (err.status === 0) {
+          this.error = '❌ Network error. Please check your connection.';
+        } else {
+          this.error = err?.error?.message ?? err?.message ?? '❌ Transfer failed. Please try again.';
+        }
         this.message = '';
       }
     });
@@ -205,15 +250,14 @@ export class Transfer implements OnInit, OnDestroy {
   }
 
   onFromAccountChange() {
-  const acc = this.transferForm.get('fromAccount')?.value as AccountInterface | null;
-  this.selectedFromAccount = acc;
+    const acc = this.transferForm.get('fromAccount')?.value as AccountInterface | null;
+    this.selectedFromAccount = acc;
 
-  const amountCtrl = this.transferForm.get('amount');
-  if (amountCtrl && acc) {
-    if (amountCtrl.value && Number(amountCtrl.value) > (acc.balance ?? 0)) {
-      amountCtrl.setValue(null);
+    const amountCtrl = this.transferForm.get('amount');
+    if (amountCtrl && acc) {
+      if (amountCtrl.value && Number(amountCtrl.value) > (acc.balance ?? 0)) {
+        amountCtrl.setValue(null);
+      }
     }
   }
-}
-
 }

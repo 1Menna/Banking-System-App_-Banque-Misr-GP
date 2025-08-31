@@ -1,6 +1,11 @@
-<div class="title">
-  <h5>Transaction History</h5>
-  <p>View and filter your account transactions</p>
+<div class="title d-flex justify-content-between align-items-center">
+  <div>
+    <h5>Transaction History</h5>
+    <p>View and filter your account transactions</p>
+  </div>
+  <button class="btn btn-outline-primary btn-sm" (click)="refreshTransactions()" [disabled]="isLoading">
+    <i class="fa fa-refresh" [class.fa-spin]="isLoading"></i> Refresh
+  </button>
 </div>
 
 <div class="container">
@@ -31,7 +36,7 @@
           <input type="text" [(ngModel)]="query" class="search-field"
             placeholder=" Search by description..."/> 
           <small class="text-muted">
-            Showing {{(transactions | transactionFilter:query:typeFilter).length}} of {{transactions.length}} transactions
+            Showing {{(userTransactions | transactionFilter:query:typeFilter).length}} of {{userTransactions.length}} transactions
           </small>
         </div>
         <div class="transaction-type">
@@ -48,7 +53,7 @@
 </div>
 
 
-@if ((transactions | transactionFilter:query:typeFilter).length === 0) {
+@if ((userTransactions | transactionFilter:query:typeFilter).length === 0) {
   <div class="text-muted">
     No transactions found.
   </div>
@@ -64,9 +69,9 @@
   <div class="card-design">
      <div class="transactions mt-4">
   <h6>Transactions</h6>
-  <p class="transactions-no">{{ (transactions | transactionFilter:query:typeFilter).length }} transactions found</p>
+  <p class="transactions-no">{{ (userTransactions | transactionFilter:query:typeFilter).length }} transactions found</p>
 
-  @if ((transactions | transactionFilter:query:typeFilter).length === 0) {
+  @if ((userTransactions | transactionFilter:query:typeFilter).length === 0) {
     <p class="text-muted">No transactions found</p>
   } @else {
     <div class="stack">
